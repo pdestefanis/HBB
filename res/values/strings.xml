@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="app_name">HBB</string>
+    <string name="main_record">New Record</string>
+    <string name="main_list">Review</string>
+    <string name="main_help">Help !</string>
+    <string name="time_now">Local Time :</string>
+    <string name="time_elapsed">Elapsed     :</string> 
+    <string name="time_remaining">Remaining :</string>
+    <string name="button_record">Record</string> 
+    <string name="button_stop">Stop</string> 
+    <string name="saveDialog_positive">Yes</string>
+    <string name="saveDialog_negative">No</string>
+    <string name="saveDialog_title">Confirm</string>
+    <string name="saveDialog_extra">Stop Recording ?</string>
+    <string name="noteDialog_positive">Yes</string>
+    <string name="noteDialog_negative">No</string>
+    <string name="noteDialog_title">Record Saved</string>
+    <string name="noteDialog_extra">Add notes ?</string>    
+    <string name="note_save">Save</string>    
+    <string name="note_title">Notes</string>
+    <string name="error_sdcard">SD-Card not mounted !</string>
+    <string name="error_noData">No files recorded yet !</string>
+    <string name="initial">00:00:00</string>    
+    <string name="progress_loadItems">Loading &#8230;</string>
+    <string name="progress_uploadItems">Uploading &#8230;</string>
+    
+    <string name="totalMarks"> Marks</string>
+    <string name="help">Help screen. Text TBD</string>
+    <string name="webResponse_parsing_error">Faild to parse server response !</string>
+    <string name="webResponse_protocol_error">Error contacting server, server may be temporarily offline !</string>
+    <string name="error">Error</string>
+    
+    <string name="cry_lable">Did the baby cry spontaneously at birth?</string>
+    <string name="cry1">Yes</string>
+    <string name="cry2">No</string>
+    <string name="cry3">N/A</string>
+    
+    <string name="ventilation_lable">Did you have to start bag and mask ventilation?</string>
+    <string name="ventilation1">Yes</string>
+    <string name="ventilation2">No</string>
+    <string name="ventilation3">N/A</string>
+    <string name="primary_lable">Primary cause of death</string>
+    <string name="other_lable">If &#8220;Malformation&#8221; or &#8220;Other&#8221;, please specify:</string>
+    <string name="problem_lable">Problems when using the system:</string>
+    <string-array name="primary_array">
+        <item>Fresh stillbirth</item>
+        <item>Macerated stillbirth</item>
+        <item>Birth Asphyxia</item>
+        <item>Low birth weight (&lt;2500g)</item>
+        <item>prematurity</item>    
+        <item>Infection</item>
+        <item>Malformation</item>
+        <item>Other</item>
+        <item>Don’t Know</item>
+    </string-array>
+    
+</resources>

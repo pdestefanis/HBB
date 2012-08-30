@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:background="#ffffffff" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+        <Button android:id="@+id/recordButton"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:background="@drawable/blackbutton" android:layout_margin="10.0dip" android:text="@string/main_record"  style="@style/ButtonStyle" />
+        <Button android:id="@+id/listButton"
+             android:layout_height="wrap_content"
+             android:layout_width="fill_parent"
+             android:background="@drawable/blackbutton" android:layout_margin="10.0dip" android:text="@string/main_list"   style="@style/ButtonStyle" />
+        <Button android:id="@+id/helpButton"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:background="@drawable/blackbutton" android:layout_margin="10.0dip" android:text="@string/main_help"  style="@style/ButtonStyle" />
+</LinearLayout>

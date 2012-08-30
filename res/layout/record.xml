@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+        <Button android:id="@+id/recordButton" android:background="@drawable/blackbutton" android:layout_margin="10.0dip" android:text="@string/button_record"  style="@style/ButtonStyle" />
+          <LinearLayout  android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" >
+                <TextView android:textStyle="bold" android:textColor="@android:color/black" android:id="@+id/systemTime_lable" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/time_now" />
+
+           <TextView
+               android:id="@+id/systemTime_Value"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="10dp"
+               android:layout_weight="1"
+               android:textColor="@android:color/black" />
+
+           </LinearLayout>
+        <TableLayout android:id="@+id/tableLayout" android:layout_width="fill_parent" android:layout_height="wrap_content" >
+            <TableRow  android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" >
+                <TextView android:textStyle="bold" android:textColor="@android:color/black" android:id="@+id/elapsedTime_lable" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/time_elapsed" />
+                <TextView android:textColor="@android:color/black" android:id="@+id/elapsedTime_Value" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" />
+            </TableRow>
+            <TableRow  android:padding="10.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" >
+                <TextView android:textStyle="bold" android:textColor="@android:color/black" android:id="@+id/remainingTime_lable" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/time_remaining" />
+                <TextView android:textColor="@android:color/black" android:id="@+id/remainingTime_Value" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0" />
+            </TableRow>
+        </TableLayout>
+</LinearLayout>

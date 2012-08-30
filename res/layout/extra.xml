@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+     >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cry_lable"
+         />
+
+    <RadioGroup
+        android:id="@+id/radioCry"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:checkedButton="@+id/cry_3" >
+
+        <RadioButton
+            android:id="@+id/cry_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cry1" />
+
+        <RadioButton
+            android:id="@+id/cry_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cry2" />
+
+        <RadioButton
+            android:id="@+id/cry_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cry3" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ventilation_lable"
+         />
+
+    <RadioGroup
+        android:id="@+id/radioVentilation"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:checkedButton="@+id/ventilation_3" >
+
+        <RadioButton
+            android:id="@+id/ventilation_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ventilation1" />
+
+        <RadioButton
+            android:id="@+id/ventilation_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ventilation2" />
+
+        <RadioButton
+            android:id="@+id/ventilation_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ventilation3" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/primary_lable"
+         />
+
+    <Spinner
+        android:id="@+id/primary_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/other_lable"
+         />
+
+    <EditText
+        android:id="@+id/other_editText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3" >
+
+    </EditText>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/problem_lable"
+         />
+
+    <EditText
+        android:id="@+id/problem_editText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3" >
+
+    </EditText>
+
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="20dp"
+        android:text="@string/note_save"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>
