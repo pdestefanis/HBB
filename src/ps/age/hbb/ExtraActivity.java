@@ -1,8 +1,10 @@
 package ps.age.hbb;
 
-import android.app.Activity;
-import android.content.res.Resources;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,18 +20,34 @@ import android.widget.Spinner;
 import android.widget.TextView;;
 
 public class ExtraActivity extends Activity {
-
+	protected static final String TAG = ExtraActivity.class.getSimpleName();
 
 
 	Button mSave;
 	EditText mProblem;
 	EditText mOther;
+	EditText mID;
 	RadioGroup cryGroup;
 	RadioGroup ventilationGroup;
 	Spinner mPrimary;
 	RecordItem mItem;
+	
 	DBWraper mWraper;
 	String selectedPrimary;
+	JSONArray mForm;
+	
+	/*
+	 * JSON String headers
+	 */
+	protected static final String ID 			= "id";
+	protected static final String VALUE			= "value";
+	protected static final int ID_IDENT			= 1;
+	protected static final int ID_PRIMARY 		= 2;
+	protected static final int ID_CRY     		= 3;
+	protected static final int ID_VENTILATION	= 4;
+	protected static final int ID_OTHER 		= 5;
+	protected static final int ID_PROBLEM 		= 6;	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +60,7 @@ public class ExtraActivity extends Activity {
         mPrimary 		 = (Spinner) findViewById(R.id.primary_spinner);
         mProblem	     = (EditText) findViewById(R.id.problem_editText);
         mOther		     = (EditText) findViewById(R.id.other_editText);
+        mID				 = (EditText) findViewById(R.id.id_editText);
         
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                R.array.primary_array , android.R.layout.simple_spinner_item);
@@ -53,7 +72,7 @@ public class ExtraActivity extends Activity {
 			  public void onItemSelected(AdapterView<?> parent, View view, 
 			            int pos, long id) {
 				selectedPrimary = ((TextView) view).getText().toString();
-				Log.e("tag", selectedPrimary);
+				Log.e("TAG", selectedPrimary);
 			}
 
 			@Override
@@ -65,35 +84,16 @@ public class ExtraActivity extends Activity {
         mItem = (RecordItem) getIntent().getSerializableExtra("item");
         mWraper = new DBWraper(this);
         mSave.setOnClickListener(listener);
+        if(mItem.getExtra()!=null){
+        	loadForm();
+        }
     }
     private OnClickListener listener = new OnClickListener(){
 
 		@Override
 		public void onClick(View v) {
 			if(mItem != null){
-		        Resources res = getResources();
-		        StringBuilder builder = new StringBuilder();
-		        builder.append(res.getString(R.string.cry_lable)).append("\n");
-		        RadioButton btn = (RadioButton) findViewById(cryGroup.getCheckedRadioButtonId());
-		        builder.append(btn.getText()).append("\n");
-		        
-		        builder.append(res.getString(R.string.ventilation_lable)).append("\n");
-		        btn = (RadioButton) findViewById(ventilationGroup.getCheckedRadioButtonId());
-		        builder.append(btn.getText()).append("\n");		   
-		        if(selectedPrimary != null){
-			        builder.append(res.getString(R.string.primary_lable)).append("\n");		   
-			        builder.append(selectedPrimary+"\n");
-		        }
-		        if(mOther.getText().toString().trim().length() > 0){
-			        builder.append(res.getString(R.string.other_lable)).append("\n");		   
-			        builder.append(mOther.getText().toString().trim()).append("\n");
-		        }
-		        if(mProblem.getText().toString().trim().length() > 0){
-			        builder.append(res.getString(R.string.problem_lable)).append("\n");		   
-			        builder.append(mProblem.getText().toString().trim()).append("\n");
-		        }
-			    mItem.setNote(builder.toString());
-				Log.e("tag", builder.toString());
+				saveForm();
 				mWraper.insertRecord(mItem);
 				mWraper.close();
 			}
@@ -101,4 +101,77 @@ public class ExtraActivity extends Activity {
 		}
     	
     };
+    private void loadForm(){
+    	try{
+    	mForm = new JSONArray(mItem.getExtra());
+    	for(int i=0;i<mForm.length();i++){
+    		JSONObject obj = mForm.getJSONObject(i);
+    		String value = obj.getString(VALUE);
+    		int id  = obj.getInt(ID);
+    		switch(id){
+    		case ID_IDENT: 
+    			mID.setText(value);
+    			break;
+    		case ID_CRY:     		
+    			((RadioButton)cryGroup.findViewWithTag(value)).setSelected(true);
+    			break;
+    		case ID_VENTILATION:
+    			((RadioButton)ventilationGroup.findViewWithTag(value)).setSelected(true);
+    			break;  			
+    		case ID_OTHER:
+				mOther.setText(value);
+				break;
+    		case ID_PROBLEM:
+    			mProblem.setText(value);
+    			break;
+    			
+    		}
+    		
+    	}
+    	}catch(JSONException ex){
+    		Log.e(TAG, ex.toString());
+    	}
+    }
+    private void saveForm(){
+        if(mID.getText().toString().length() != 0 ){
+        	appendToArray(ID_IDENT,	mID.getText().toString());
+        }
+        RadioButton btn = (RadioButton) findViewById(cryGroup.getCheckedRadioButtonId());
+    	appendToArray(ID_CRY,	btn.getText().toString());
+        btn = (RadioButton) findViewById(ventilationGroup.getCheckedRadioButtonId());
+    	appendToArray(ID_VENTILATION,	btn.getText().toString());
+
+        /*
+         * Check if the user selected a value in the primary spinner
+         */
+        if(selectedPrimary != null){		        	
+        	appendToArray(ID_PRIMARY,selectedPrimary);
+        }
+        /*
+         * Check if their is data in the editText field
+         */
+        if(mOther.getText().toString().trim().length() > 0){
+	        appendToArray(ID_OTHER,mOther.getText().toString().trim());
+        }
+        if(mProblem.getText().toString().trim().length() > 0){;
+	        appendToArray(ID_PROBLEM,mProblem.getText().toString().trim());
+        }		        
+	    mItem.setExtra(mForm.toString());
+		Log.e("TAG", mForm.toString());
+
+    }
+    private void appendToArray(int id,String value){
+    	if(mForm == null)
+    		mForm = new JSONArray();
+    	JSONObject object = new JSONObject();
+    	try {
+			object.put(ID, id);
+	    	object.put(VALUE, value);
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+			Log.e(TAG, e.toString());
+		}
+    	mForm.put(object);
+    }
 }

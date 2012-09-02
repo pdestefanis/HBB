@@ -29,9 +29,9 @@ public class NoteActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if(mItem != null){
-				String note = mNote.getText().toString();
-				if( note != null){
-					mItem.setNote(note);
+				String extra = mNote.getText().toString();
+				if( extra != null){
+					mItem.setExtra(extra);
 				}
 				mWraper.insertRecord(mItem);
 				mWraper.close();

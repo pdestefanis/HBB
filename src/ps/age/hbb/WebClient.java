@@ -54,7 +54,7 @@ public class WebClient {
 	public static final String FOURTH_MARK  = "fourth_mark";
 	public static final String TIME_CREATED = "time_created";
 	public static final String TOTAL_LENGTH = "length";
-	public static final String EXTRA_NOTE   = "note";
+	public static final String EXTRA   	    = "extra";
 	
 	private static String mResponse;
 	private static String errorMessage;
@@ -91,7 +91,7 @@ public class WebClient {
 		nameValuePairs.add(new BasicNameValuePair(SECOND_MARK, String.valueOf(item.getSecondMark())));
 		nameValuePairs.add(new BasicNameValuePair(THIRD_MARK, String.valueOf(item.getThirdMark())));
 		nameValuePairs.add(new BasicNameValuePair(FOURTH_MARK, String.valueOf(item.getFourthMark())));
-		nameValuePairs.add(new BasicNameValuePair(EXTRA_NOTE, item.getNote()));
+		nameValuePairs.add(new BasicNameValuePair(EXTRA, item.getExtra()));
 
 
 		return postToServer(uploadURL,nameValuePairs);

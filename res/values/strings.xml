@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">HBB</string>
     <string name="main_record">New Record</string>
     <string name="main_list">Review</string>
@@ -32,7 +31,8 @@
     <string name="webResponse_parsing_error">Faild to parse server response !</string>
     <string name="webResponse_protocol_error">Error contacting server, server may be temporarily offline !</string>
     <string name="error">Error</string>
-    
+	<string name="extra">Form</string>   
+	<string name="id_lable">ID</string> 
     <string name="cry_lable">Did the baby cry spontaneously at birth?</string>
     <string name="cry1">Yes</string>
     <string name="cry2">No</string>

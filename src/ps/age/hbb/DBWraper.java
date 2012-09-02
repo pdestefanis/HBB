@@ -16,7 +16,7 @@ public class DBWraper {
 	  OpenHelper openHelper;
 	  public static final String RECORD_TABLE       = "record";
 	  public static final String RECORD_PATH        = "path";
-	  public static final String RECORD_NOTE        = "note";
+	  public static final String RECORD_EXTRA       = "extra";
 	  public static final String RECORD_MARK_FIRST  = "first";
 	  public static final String RECORD_MARK_SECOND = "second";
 	  public static final String RECORD_MARK_THIRD  = "third";
@@ -34,7 +34,7 @@ public class DBWraper {
 		  ContentValues values = new ContentValues();
 		  
 		  values.put(RECORD_PATH, item.getPath());
-		  values.put(RECORD_NOTE, item.getNote());
+		  values.put(RECORD_EXTRA, item.getExtra());
 		  values.put(RECORD_TIME, item.getTime());
 		  
 		  values.put(RECORD_MARK_FIRST, item.getFirstMark());
@@ -52,7 +52,7 @@ public class DBWraper {
 		  ContentValues values = new ContentValues();
 		  values.put(RECORD_ID, item.getId());
 		  values.put(RECORD_PATH, item.getPath());
-		  values.put(RECORD_NOTE, item.getNote());
+		  values.put(RECORD_EXTRA, item.getExtra());
 		  values.put(RECORD_TIME, item.getTime());
 		  values.put(RECORD_MARK_FIRST, item.getFirstMark());
 		  values.put(RECORD_MARK_SECOND, item.getSecondMark());
@@ -72,7 +72,7 @@ public class DBWraper {
 			  int path 	    = cursor.getColumnIndex(RECORD_PATH);
 			  int id        = cursor.getColumnIndex(RECORD_ID);
 			  int time      = cursor.getColumnIndex(RECORD_TIME);
-			  int note    	= cursor.getColumnIndex(RECORD_NOTE);
+			  int extra    	= cursor.getColumnIndex(RECORD_EXTRA);
 			  int first     = cursor.getColumnIndex(RECORD_MARK_FIRST);
 			  int second 	= cursor.getColumnIndex(RECORD_MARK_SECOND);
 			  int third	    = cursor.getColumnIndex(RECORD_MARK_THIRD);
@@ -83,7 +83,7 @@ public class DBWraper {
 				  item.setId(cursor.getLong(id));
 				  item.setTime(cursor.getLong(time));
 				  item.setPath(cursor.getString(path));
-				  item.setNote(cursor.getString(note));
+				  item.setExtra(cursor.getString(extra));
 				  item.setFirstMark(cursor.getLong(first));
 				  item.setSecondMark(cursor.getLong(second));
 				  item.setThirdMark(cursor.getLong(third));
@@ -104,7 +104,7 @@ public class DBWraper {
 		  @Override 
 		  public void onCreate(SQLiteDatabase db) {
 			  db.execSQL("CREATE TABLE " + RECORD_TABLE + "("+RECORD_ID+" INTEGER PRIMARY KEY autoincrement, "+
-					    RECORD_PATH+" TEXT NOT NULL, "+RECORD_NOTE+" TEXT NULL, "+
+					    RECORD_PATH+" TEXT NOT NULL, "+RECORD_EXTRA+" TEXT NULL, "+
 					    RECORD_TIME+" INTEGER NOT NULL, "+
 					  	RECORD_MARK_FIRST+" INTEGER NULL, "+RECORD_MARK_SECOND+" INTEGER NULL,"+
 					  	RECORD_MARK_THIRD +" INTEGER NULL, "+RECORD_MARK_FOURTH+" INTEGER NULL)");

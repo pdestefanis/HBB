@@ -14,7 +14,7 @@ public class RecordItem implements Serializable {
 	private long fourthMark = -1;
 	private int length;
 	private String path;
-	private String note;
+	private String extra;
 	private long time;
 
 	public long getId() {
@@ -70,12 +70,12 @@ public class RecordItem implements Serializable {
 		this.path = path;
 	}
 
-	public String getNote() {
-		return note;
+	public String getExtra() {
+		return extra;
 	}
 
-	public void setNote(String note) {
-		this.note = note;
+	public void setExtra(String extra) {
+		this.extra = extra;
 	}
 
 	public long getTime() {

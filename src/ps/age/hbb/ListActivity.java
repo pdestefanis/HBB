@@ -89,11 +89,6 @@ public class ListActivity extends Activity {
         protected ArrayList<RecordItem> doInBackground(Void ... args) {
         	DBWraper wraper = new DBWraper(ListActivity.this);
 	        ArrayList<RecordItem> list = wraper.getRecordsList();
-	        if(list != null){
-	        	for(RecordItem rec : list){
-	        		Log.e("tag", rec.getPath()+":"+rec.getNote()+":"+String.valueOf(rec.getId())+":"+String.valueOf(rec.getFirstMark()));
-	        	}
-	        }
 	        wraper.close();
         	
           return list;

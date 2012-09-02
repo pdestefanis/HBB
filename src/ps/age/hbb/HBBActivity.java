@@ -53,8 +53,9 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hbb);
+        
         mWraper = new DBWraper(this);
-        mItem = (RecordItem) getIntent().getSerializableExtra("item");
+        mItem   = (RecordItem) getIntent().getSerializableExtra("item");
         
         play     	= (ImageView) findViewById(R.id.play);
         first 		= (ImageView) findViewById(R.id.mark1);
@@ -78,9 +79,11 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     	second.setOnClickListener(listener);
     	third.setOnClickListener(listener);
     	fourth.setOnClickListener(listener);
-    	mHandler = new Handler();
     	seekBar.setEnabled(false);
     	seekBar.setOnSeekBarChangeListener(this);
+    	
+    	mHandler = new Handler();
+
     	updateUI();
     	PrepairPlayer();
         
