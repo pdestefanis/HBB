@@ -5,7 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import ps.age.hbb.core.RecordItem;
+import ps.age.util.DBWraper;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -21,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HBBActivity extends Activity implements OnSeekBarChangeListener, OnCompletionListener, OnPreparedListener {
+	protected static final String TAG = HBBActivity.class.getSimpleName();
+
 	MediaPlayer mPlayer;
 	Handler mHandler;
 	RecordItem mItem;
@@ -37,7 +43,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 	TextView fourthText;
 	TextView currentTime;
 	TextView endTime;
-	
+	TextView reviewForm;
 	SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss");
 	Date date = new Date();
 	
@@ -71,6 +77,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
         fourthText  = (TextView) findViewById(R.id.mark4_time);
         currentTime = (TextView) findViewById(R.id.time_current);
         endTime     = (TextView) findViewById(R.id.time_end);
+        reviewForm  = (TextView) findViewById(R.id.form_textView);
         
     	fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
     	
@@ -86,17 +93,34 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 
     	updateUI();
     	PrepairPlayer();
-        
+    	reviewForm.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(HBBActivity.this,ExtraActivity.class);
+				intent.putExtra(ExtraActivity.ITEM, mItem);
+				startActivityForResult(intent, ExtraActivity.REQUEST_CODE);
+			}
+    		
+    	});
+    }
+    @Override
+    protected void onResume(){
+    	super.onResume();
+    	if(mPlayer != null){
+    		mPlayer.getCurrentPosition();
+    	}
     }
     @Override
     public void onPause(){
     	super.onPause();
+    	Log.e(TAG, "onPause");
+		isPlaying = false;
     	if(isFinishing()){
     		if(mPlayer!= null){
     			
     			if(mPlayer.isPlaying()){
     				mPlayer.stop();
-    				isPlaying = false;
     			}
     			mPlayer.release();
     			mPlayer = null;
@@ -110,6 +134,19 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     				mWraper.close();
     			}
     		}.start();
+    	}
+    	else{
+    		mPlayer.pause();
+			play.setImageResource(android.R.drawable.ic_media_play);    		
+    	}
+    }
+    
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data){
+    	
+    	if((requestCode == ExtraActivity.REQUEST_CODE) 
+    			&& (data != null)){
+    		mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
     	}
     }
     private void updateUI(){

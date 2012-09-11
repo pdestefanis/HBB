@@ -1,5 +1,7 @@
 package ps.age.hbb;
 
+import ps.age.hbb.core.RecordItem;
+import ps.age.util.DBWraper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

@@ -6,6 +6,10 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
+import ps.age.hbb.core.RecordItem;
+import ps.age.util.DBWraper;
+import ps.age.util.WebClient;
+
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,7 +47,6 @@ public class ListActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
-        
         WebClient.setURL(getResources().getString(R.string.url));
         
         listView = (ListView) findViewById(R.id.items_list);
@@ -62,7 +65,7 @@ public class ListActivity extends Activity {
 			public void onItemClick(AdapterView<?> adapter, View view, int position,
 					long id) {
 				Intent intent = new Intent(ListActivity.this,HBBActivity.class);
-				intent.putExtra("item", mList.get(position));
+				intent.putExtra(ExtraActivity.ITEM, mList.get(position));
 				startActivity(intent);
 				finish();
 			}

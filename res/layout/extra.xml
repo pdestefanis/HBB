@@ -10,8 +10,7 @@
         android:layout_height="wrap_content" 
          android:background="@drawable/list_header_background"
          android:orientation="vertical"
-         >
-
+         >
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
@@ -22,173 +21,183 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
-
-    <LinearLayout
+
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical" >
-
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/TextView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/id_lable"
+                    android:textColor="@android:color/black" />
+
+                <EditText
+                    android:id="@+id/id_editText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:maxEms="10"
+                    android:singleLine="true"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/TextView01"
+                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/id_lable"
+                android:text="@string/cry_lable"
                 android:textColor="@android:color/black" />
-
-            <EditText
-                android:id="@+id/id_editText"
+
+            <RadioGroup
+                android:id="@+id/radioCry"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/cry_3"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/cry_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="@string/cry1"
+                    android:text="@string/cry1"
+                    android:textColor="@android:color/black" />
+
+                <RadioButton
+                    android:id="@+id/cry_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="@string/cry2"
+                    android:text="@string/cry2"
+                    android:textColor="@android:color/black" />
+
+                <RadioButton
+                    android:id="@+id/cry_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:tag="@string/cry3"
+                    android:text="@string/cry3"
+                    android:textColor="@android:color/black" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ventilation_lable"
+                android:textColor="@android:color/black" />
+
+            <RadioGroup
+                android:id="@+id/radioVentilation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/ventilation_3"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/ventilation_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ventilation1"
+                    android:tag="@string/ventilation1"
+                    android:textColor="@android:color/black" />
+
+                <RadioButton
+                    android:id="@+id/ventilation_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ventilation2"
+                    android:tag="@string/ventilation2"                    
+                    android:textColor="@android:color/black" />
+
+                <RadioButton
+                    android:id="@+id/ventilation_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ventilation3"
+                    android:textColor="@android:color/black"
+                    android:tag="@string/ventilation3"
+                     />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/primary_lable"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/primary_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/other_lable"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/other_editText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:maxEms="10"
-                android:singleLine="true"
+                android:maxLines="3"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/problem_lable"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/problem_editText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:maxLines="3"
                 android:textColor="@android:color/black" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cry_lable"
-            android:textColor="@android:color/black" />
-
-        <RadioGroup
-            android:id="@+id/radioCry"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/cry_3"
-            android:orientation="horizontal" >
-
-            <RadioButton
-                android:id="@+id/cry_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cry1"
-                android:tag="@string/cry1"
-                android:textColor="@android:color/black" />
-
-            <RadioButton
-                android:id="@+id/cry_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cry2"
-                android:tag="@string/cry2"                
-                android:textColor="@android:color/black" />
-
-            <RadioButton
-                android:id="@+id/cry_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cry3"
-                android:tag="@string/cry3"
-                android:textColor="@android:color/black" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ventilation_lable"
-            android:textColor="@android:color/black" />
-
-        <RadioGroup
-            android:id="@+id/radioVentilation"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/ventilation_3"
-            android:orientation="horizontal" >
-
-            <RadioButton
-                android:id="@+id/ventilation_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/ventilation1"
-                android:textColor="@android:color/black" />
-
-            <RadioButton
-                android:id="@+id/ventilation_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/ventilation2"
-                android:textColor="@android:color/black" />
-
-            <RadioButton
-                android:id="@+id/ventilation_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/ventilation3"
-                android:textColor="@android:color/black" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/primary_lable"
-            android:textColor="@android:color/black" />
-
-        <Spinner
-            android:id="@+id/primary_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/other_lable"
-            android:textColor="@android:color/black" />
-
-        <EditText
-            android:id="@+id/other_editText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:maxLines="3"
-            android:textColor="@android:color/black" >
-
-            <requestFocus />
-        </EditText>
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/problem_lable"
-            android:textColor="@android:color/black" />
-
-        <EditText
-            android:id="@+id/problem_editText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:maxLines="3"
-            android:textColor="@android:color/black" />
+    </ScrollView>
 
-        <Button
-            android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_margin="5dp"
-            android:text="@string/note_save"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="10dp"
+        android:text="@string/note_save"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>
