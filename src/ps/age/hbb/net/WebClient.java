@@ -1,4 +1,4 @@
-package ps.age.util;
+package ps.age.hbb.net;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ps.age.hbb.R;
+import ps.age.hbb.R.string;
 import ps.age.hbb.core.RecordItem;
 
 import android.content.Context;
@@ -42,7 +43,7 @@ public class WebClient {
 	/*
 	 * Server URL
 	 */
-	private static String uploadURL           = "http://domain/path/to/upload.php";
+	private static String uploadURL           = "http://helpingbabybreath.appspot.com/data";
 	
 	/*
 	 * URL variables
@@ -87,18 +88,19 @@ public class WebClient {
 		
 		nameValuePairs.add(new BasicNameValuePair(USER_NAME,userName));
 		nameValuePairs.add(new BasicNameValuePair(TIME_CREATED,String.valueOf(item.getTime())));		
+//		nameValuePairs.add(new BasicNameValuePair(TOTAL_LENGTH,String.valueOf(item.getLength())));
 		nameValuePairs.add(new BasicNameValuePair(FIRST_MARK,String.valueOf(item.getFirstMark())));
 		nameValuePairs.add(new BasicNameValuePair(SECOND_MARK, String.valueOf(item.getSecondMark())));
 		nameValuePairs.add(new BasicNameValuePair(THIRD_MARK, String.valueOf(item.getThirdMark())));
 		nameValuePairs.add(new BasicNameValuePair(FOURTH_MARK, String.valueOf(item.getFourthMark())));
 		nameValuePairs.add(new BasicNameValuePair(EXTRA, item.getExtra()));
 		return postToServer(uploadURL,nameValuePairs);
-
 	}
 	public static boolean synchronizeRecords(String userName, String authKey , ArrayList<RecordItem> mList) {
 		boolean ok = true;
 		for(RecordItem item : mList){
 			ok = upload(userName,authKey,item);
+			Log.e(tag, "item");
 			if(!ok)
 				break;
 		}

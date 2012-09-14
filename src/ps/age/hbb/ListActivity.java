@@ -164,23 +164,23 @@ public class ListActivity extends Activity {
 		  .show();
 	}
 	protected void showError(String msg){
-		showDialog(getResources().getString(R.string.error),msg);
+		if(msg != null)
+			showDialog(getResources().getString(R.string.error),msg);
 	}
 	
-	public final class UploadTask extends AsyncTask<Void, Void, JSONObject> {
+	public final class UploadTask extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
-		protected JSONObject doInBackground(Void... params) {
+		protected Boolean doInBackground(Void... params) {
 			WebClient.setContext(getApplicationContext());
-			WebClient.synchronizeRecords("usrName", "key", mList);
+			return WebClient.synchronizeRecords("usrName", "key", mList);
 			
-			return WebClient.parseResponse();
 		}
 		@Override
-		public void onPostExecute(JSONObject result){
+		public void onPostExecute(Boolean success){
 			Log.e(TAG, "onPostExcute");
 			mProgressDialog.dismiss();
-			if(result != null){
+			if(success){
 					
 					Toast.makeText(ListActivity.this, "Success", Toast.LENGTH_LONG).show();
 					
