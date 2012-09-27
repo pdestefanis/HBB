@@ -22,10 +22,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,16 +33,16 @@ import android.widget.Toast;
 public class RecordActivity extends Activity implements
 		MediaRecordEventListener {
 
-	private String tag = RecordActivity.class.getSimpleName();
 
-	Handler mHandler;
-	MediaRecorder mRecorder;
-	MediaErrorBroadcastReceiver mReceiver;
-	Button mRecord;
-	TextView systemTime;
-	TextView elapsedTime;
-	TextView remainingTime;
-	RecordItem mItem;
+	private Handler mHandler;
+	private MediaRecorder mRecorder;
+	private MediaErrorBroadcastReceiver mReceiver;
+	private Button mRecord;
+	private ImageView mBack;
+	private TextView systemTime;
+	private TextView elapsedTime;
+	private TextView remainingTime;
+	private RecordItem mItem;
 	private DateFormat fmt = DateFormat.getDateTimeInstance();
 	private SimpleDateFormat timerFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -67,13 +67,21 @@ public class RecordActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record);
 
-		mRecord = (Button) findViewById(R.id.recordButton);
-		systemTime = (TextView) findViewById(R.id.systemTime_Value);
-		elapsedTime = (TextView) findViewById(R.id.elapsedTime_Value);
-		remainingTime = (TextView) findViewById(R.id.remainingTime_Value);
+		mRecord 		= (Button) findViewById(R.id.recordButton);
+		mBack   		= (ImageView) findViewById(R.id.back);
+		systemTime 		= (TextView) findViewById(R.id.systemTime_Value);
+		elapsedTime 	= (TextView) findViewById(R.id.elapsedTime_Value);
+		remainingTime 	= (TextView) findViewById(R.id.remainingTime_Value);
 
 		mRecord.setOnClickListener(listener);
+		mBack.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+			
+		});
 		mHandler = new Handler() {
 
 			@Override
@@ -114,6 +122,7 @@ public class RecordActivity extends Activity implements
 				}
 			}
 		};
+		
 		mHandler.post(timeRunnable);
 
 		timerFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -181,7 +190,7 @@ public class RecordActivity extends Activity implements
 		try {
 			mRecorder.prepare();
 		} catch (IOException e) {
-			Log.e(tag, e.toString());
+			e.printStackTrace();
 			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 			return;
 		}
@@ -270,7 +279,6 @@ public class RecordActivity extends Activity implements
 
 		@Override
 		public void onInfo(MediaRecorder mr, int what, int extra) {
-			Log.e(tag, "what: " + String.valueOf(what));
 		}
 	};
 

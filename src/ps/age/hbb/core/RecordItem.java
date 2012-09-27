@@ -16,7 +16,7 @@ public class RecordItem implements Serializable {
 	private String path;
 	private String extra;
 	private long time;
-
+	private long uploadTime = -1;
 	public long getId() {
 		return id;
 	}
@@ -85,6 +85,12 @@ public class RecordItem implements Serializable {
 	public void setTime(long time) {
 		this.time = time;
 	}
+	public void setUploadTime(long time){
+		uploadTime = time;
+	}
+	public long getUploadTime(){
+		return uploadTime;
+	}
 	public int getTotalMarks(){
 		int total = 0;
 		if(firstMark != -1)
@@ -99,5 +105,5 @@ public class RecordItem implements Serializable {
 		
 		return total;
 	}
-
+	
 }

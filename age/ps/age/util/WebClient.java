@@ -42,7 +42,7 @@ public class WebClient {
 	/*
 	 * Server URL
 	 */
-	private static String uploadURL           = "http://domain/path/to/upload.php";
+	private static String uploadURL           = "http://helpingbabybreath.appspot.com/data";
 	
 	/*
 	 * URL variables
@@ -93,12 +93,12 @@ public class WebClient {
 		nameValuePairs.add(new BasicNameValuePair(FOURTH_MARK, String.valueOf(item.getFourthMark())));
 		nameValuePairs.add(new BasicNameValuePair(EXTRA, item.getExtra()));
 		return postToServer(uploadURL,nameValuePairs);
-
 	}
 	public static boolean synchronizeRecords(String userName, String authKey , ArrayList<RecordItem> mList) {
 		boolean ok = true;
 		for(RecordItem item : mList){
 			ok = upload(userName,authKey,item);
+			Log.e(tag, "item");
 			if(!ok)
 				break;
 		}

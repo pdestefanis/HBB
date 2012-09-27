@@ -27,7 +27,8 @@ public class DBWraper {
 	public static final String RECORD_MARK_FOURTH = "fourth";
 	public static final String RECORD_ID = "_id";
 	public static final String RECORD_TIME = "time";
-
+	public static final String RECORD_TIME_UPLOAD = "upload";
+	
 	public DBWraper(Context context) {
 		this.context = context;
 		openHelper = new OpenHelper(this.context);
@@ -40,6 +41,7 @@ public class DBWraper {
 		values.put(RECORD_PATH, item.getPath());
 		values.put(RECORD_EXTRA, item.getExtra());
 		values.put(RECORD_TIME, item.getTime());
+		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());
 
 		values.put(RECORD_MARK_FIRST, item.getFirstMark());
 		values.put(RECORD_MARK_SECOND, item.getSecondMark());
@@ -59,32 +61,37 @@ public class DBWraper {
 		values.put(RECORD_PATH, item.getPath());
 		values.put(RECORD_EXTRA, item.getExtra());
 		values.put(RECORD_TIME, item.getTime());
+		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());		
 		values.put(RECORD_MARK_FIRST, item.getFirstMark());
 		values.put(RECORD_MARK_SECOND, item.getSecondMark());
 		values.put(RECORD_MARK_THIRD, item.getThirdMark());
 		values.put(RECORD_MARK_FOURTH, item.getFourthMark());
-
+		
 		int numRows = db.update(RECORD_TABLE, values, "_id=?",
 				new String[] { Long.toString(item.getId()) });
 		if (numRows == 1)
 			return true;
 		return false;
 	}
-
+	  public void deleteRecord(RecordItem item){
+		  
+		  db.delete(RECORD_TABLE, "_id=?", new String[]{ Long.toString(item.getId())});
+	  }
 	public ArrayList<RecordItem> getRecordsList() {
 		try {
 			Cursor cursor = db.query(RECORD_TABLE, null, null, null, null,
 					null, RECORD_ID);
 			ArrayList<RecordItem> list = null;
 			if ((cursor != null) && cursor.moveToFirst()) {
-				int path = cursor.getColumnIndexOrThrow(RECORD_PATH);
-				int id = cursor.getColumnIndexOrThrow(RECORD_ID);
-				int time = cursor.getColumnIndexOrThrow(RECORD_TIME);
-				int extra = cursor.getColumnIndexOrThrow(RECORD_EXTRA);
-				int first = cursor.getColumnIndexOrThrow(RECORD_MARK_FIRST);
-				int second = cursor.getColumnIndexOrThrow(RECORD_MARK_SECOND);
-				int third = cursor.getColumnIndexOrThrow(RECORD_MARK_THIRD);
-				int fourth = cursor.getColumnIndexOrThrow(RECORD_MARK_FOURTH);
+				int path 	= cursor.getColumnIndexOrThrow(RECORD_PATH);
+				int id 		= cursor.getColumnIndexOrThrow(RECORD_ID);
+				int time 	= cursor.getColumnIndexOrThrow(RECORD_TIME);
+				int extra 	= cursor.getColumnIndexOrThrow(RECORD_EXTRA);
+				int first 	= cursor.getColumnIndexOrThrow(RECORD_MARK_FIRST);
+				int second	= cursor.getColumnIndexOrThrow(RECORD_MARK_SECOND);
+				int third 	= cursor.getColumnIndexOrThrow(RECORD_MARK_THIRD);
+				int fourth  = cursor.getColumnIndexOrThrow(RECORD_MARK_FOURTH);
+				int upload  = cursor.getColumnIndexOrThrow(RECORD_TIME_UPLOAD);
 				list = new ArrayList<RecordItem>();
 				do {
 					RecordItem item = new RecordItem();
@@ -96,6 +103,7 @@ public class DBWraper {
 					item.setSecondMark(cursor.getLong(second));
 					item.setThirdMark(cursor.getLong(third));
 					item.setFourthMark(cursor.getLong(fourth));
+					item.setUploadTime(cursor.getLong(upload));
 					list.add(item);
 				} while (cursor.moveToNext());
 				cursor.close();
@@ -124,7 +132,8 @@ public class DBWraper {
 					+ RECORD_TIME + " INTEGER NOT NULL, " + RECORD_MARK_FIRST
 					+ " INTEGER NULL, " + RECORD_MARK_SECOND + " INTEGER NULL,"
 					+ RECORD_MARK_THIRD + " INTEGER NULL, "
-					+ RECORD_MARK_FOURTH + " INTEGER NULL)");
+					+ RECORD_MARK_FOURTH + " INTEGER NULL, "
+					+ RECORD_TIME_UPLOAD + " INTEGER NULL)");
 		}
 
 		@Override

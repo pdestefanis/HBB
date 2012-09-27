@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="hbb">Helping Baby Breath</string>
+    <string name="home">Home</string>
+    <string name="delete">Delete</string>
+	<string name="clear">clear marks</string>
     <string name="app_name">HBB</string>
     <string name="main_record">New Record</string>
     <string name="main_list">Review</string>
     <string name="main_help">Help !</string>
+    <string name="main_review">Review</string>
     <string name="time_now">Local Time :</string>
     <string name="time_elapsed">Elapsed     :</string> 
     <string name="time_remaining">Remaining :</string>
     <string name="button_record">Record</string> 
     <string name="button_stop">Stop</string> 
+    <string name="clearDialog_positive">Yes</string>
+    <string name="clearDialog_negative">No</string>
+    <string name="clearDialog_title">Clear marks</string>
+    <string name="clearDialog_extra">are you sure you want to reset all marks ?</string>
+    <string name="deleteDialog_positive">Yes</string>
+    <string name="deleteDialog_negative">No</string>
+    <string name="deleteDialog_title">Delete record</string>
+    <string name="deleteDialog_extra">are you sure you want to delete this record ?</string>     
     <string name="saveDialog_positive">Yes</string>
     <string name="saveDialog_negative">No</string>
     <string name="saveDialog_title">Confirm</string>
@@ -56,6 +68,9 @@
         <item>Other</item>
         <item>Don’t Know</item>
     </string-array>
+    <string name="alive_lable">New born is</string>
+    <string name="alive">alive</string>
+    <string name="dead">dead</string>
     
     <string name="review_form">Review Form</string>
 </resources>

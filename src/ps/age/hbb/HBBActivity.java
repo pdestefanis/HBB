@@ -10,12 +10,17 @@ import ps.age.util.DBWraper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.os.Message;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -25,85 +30,68 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HBBActivity extends Activity implements OnSeekBarChangeListener, OnCompletionListener, OnPreparedListener {
-	protected static final String TAG = HBBActivity.class.getSimpleName();
 
-	MediaPlayer mPlayer;
-	Handler mHandler;
-	RecordItem mItem;
+	public static final int CLEAR_DIALOG = 12456;
 	
-	ImageView play;
-	ImageView first;
-	ImageView second;
-	ImageView third;
-	ImageView fourth;
-	SeekBar seekBar;
-	TextView firstText;
-	TextView secondText;
-	TextView thirdText;
-	TextView fourthText;
-	TextView currentTime;
-	TextView endTime;
-	TextView reviewForm;
-	SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss");
-	Date date = new Date();
+	private MediaPlayer mPlayer;
+	private Handler mHandler;
+	private RecordItem mItem;
+	private ImageView mBack;
+	private ImageView mPlay;
+	private ImageView mFirst;
+	private ImageView mSecond;
+	private ImageView mThird;
+	private ImageView mFourth;
+	private SeekBar seekBar;
+	private TextView firstText;
+	private TextView secondText;
+	private TextView thirdText;
+	private TextView fourthText;
+	private TextView currentTime;
+	private TextView endTime;
+	private TextView reviewForm;
+	private SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss");
+	private Date date = new Date();
 	
-	long firstTime;
-	long secondTime;
-	long thirdTime;
-	long fourthTime;
-	boolean isPlaying;
-	boolean isReady = false;
-	DBWraper mWraper;
+	private boolean isPlaying;
+	private boolean isReady = false;
+	private DBWraper mWraper;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hbb);
         
         mWraper = new DBWraper(this);
         mItem   = (RecordItem) getIntent().getSerializableExtra("item");
-        
-        play     	= (ImageView) findViewById(R.id.play);
-        first 		= (ImageView) findViewById(R.id.mark1);
-        second		= (ImageView) findViewById(R.id.mark2);
-        third 		= (ImageView) findViewById(R.id.mark3);
-        fourth 		= (ImageView) findViewById(R.id.mark4);
-        
-        seekBar 	= (SeekBar) findViewById(R.id.seekBar_player);
-        
-        firstText   = (TextView) findViewById(R.id.mark1_time);
-        secondText  = (TextView) findViewById(R.id.mark2_time);
-        thirdText   = (TextView) findViewById(R.id.mark3_time);
-        fourthText  = (TextView) findViewById(R.id.mark4_time);
-        currentTime = (TextView) findViewById(R.id.time_current);
-        endTime     = (TextView) findViewById(R.id.time_end);
-        reviewForm  = (TextView) findViewById(R.id.form_textView);
-        
     	fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
-    	
-    	play.setOnClickListener(listener);
-    	first.setOnClickListener(listener);
-    	second.setOnClickListener(listener);
-    	third.setOnClickListener(listener);
-    	fourth.setOnClickListener(listener);
-    	seekBar.setEnabled(false);
-    	seekBar.setOnSeekBarChangeListener(this);
-    	
-    	mHandler = new Handler();
 
-    	updateUI();
+        initializeUI();
+    	
+    	mHandler = new Handler(){
+    		@Override
+    		public void handleMessage(Message msg){
+    			
+    			if((msg.what == CLEAR_DIALOG) 
+    					&& (msg.arg1 == RESULT_OK))
+    			{
+    				mItem.setFirstMark(0);
+    				mItem.setSecondMark(0);
+    				mItem.setThirdMark(0);
+    				mItem.setFourthMark(0);
+    				updateUI();
+    			}
+    		}
+    	};
+    	
     	PrepairPlayer();
-    	reviewForm.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				Intent intent = new Intent(HBBActivity.this,ExtraActivity.class);
-				intent.putExtra(ExtraActivity.ITEM, mItem);
-				startActivityForResult(intent, ExtraActivity.REQUEST_CODE);
-			}
-    		
-    	});
     }
+    
+    @Override
+    public final void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        initializeUI();
+	}
+    
     @Override
     protected void onResume(){
     	super.onResume();
@@ -114,7 +102,6 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     @Override
     public void onPause(){
     	super.onPause();
-    	Log.e(TAG, "onPause");
 		isPlaying = false;
     	if(isFinishing()){
     		if(mPlayer!= null){
@@ -137,7 +124,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     	}
     	else{
     		mPlayer.pause();
-			play.setImageResource(android.R.drawable.ic_media_play);    		
+			mPlay.setImageResource(android.R.drawable.ic_media_play);    		
     	}
     }
     
@@ -149,6 +136,97 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     		mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
     	}
     }
+    /*
+     *  handle UI initialization when the activity is created
+     *  or when the UI configurations has changed
+     *  from portrait to landscape for ex.
+     */
+    private void initializeUI(){
+    	
+        setContentView(R.layout.hbb);
+        
+		mFirst 		= (ImageView) findViewById(R.id.mark1);
+		mSecond		= (ImageView) findViewById(R.id.mark2);
+		mThird 		= (ImageView) findViewById(R.id.mark3);
+		mFourth 	= (ImageView) findViewById(R.id.mark4);
+		mBack       = (ImageView) findViewById(R.id.back);
+		endTime     = (TextView) findViewById(R.id.time_end);
+		reviewForm  = (TextView) findViewById(R.id.form_textView);
+		
+    	if(mPlay == null){
+    		mPlay     	= (ImageView) findViewById(R.id.play);
+       
+    		seekBar 	= (SeekBar) findViewById(R.id.seekBar_player);
+        
+    		firstText   = (TextView) findViewById(R.id.mark1_time);
+    		secondText  = (TextView) findViewById(R.id.mark2_time);
+    		thirdText   = (TextView) findViewById(R.id.mark3_time);
+    		fourthText  = (TextView) findViewById(R.id.mark4_time);
+    		currentTime = (TextView) findViewById(R.id.time_current);
+       
+    		seekBar.setEnabled(false);
+
+    	}
+    	else{
+    		Drawable draw =mPlay.getDrawable();
+    		mPlay     	= (ImageView) findViewById(R.id.play);
+    		mPlay.setImageDrawable(draw);
+    		int value = currentTime.getVisibility();
+    		CharSequence txt = currentTime.getText();
+    		currentTime = (TextView) findViewById(R.id.time_current);
+    		currentTime.setVisibility(value);
+    		currentTime.setText(txt);
+    		
+    		txt = firstText.getText();
+    		firstText   = (TextView) findViewById(R.id.mark1_time);
+    		firstText.setText(txt);
+    		
+    		txt = secondText.getText();
+    		secondText  = (TextView) findViewById(R.id.mark2_time);
+    		secondText.setText(txt);
+    		txt =thirdText.getText();
+    		thirdText   = (TextView) findViewById(R.id.mark3_time);
+    		thirdText.setText(txt);
+    		txt = fourthText.getText();
+    		fourthText  = (TextView) findViewById(R.id.mark4_time);
+    		fourthText.setText(txt);
+    		txt = currentTime.getText();
+    		currentTime = (TextView) findViewById(R.id.time_current);
+    		currentTime.setText(txt);
+    		value = seekBar.getProgress();
+    		seekBar 	= (SeekBar) findViewById(R.id.seekBar_player);
+    		seekBar.setMax(mPlayer.getDuration());
+    		seekBar.setProgress(value);
+    		
+    	}
+        
+      	mPlay.setOnClickListener(listener);
+      	mFirst.setOnClickListener(listener);
+      	mSecond.setOnClickListener(listener);
+      	mThird.setOnClickListener(listener);
+      	mFourth.setOnClickListener(listener);
+      	seekBar.setOnSeekBarChangeListener(this);
+      	
+      	reviewForm.setOnClickListener(new OnClickListener(){
+      		
+      		@Override
+      		public void onClick(View arg0) {
+      			Intent intent = new Intent(HBBActivity.this,ExtraActivity.class);
+      			intent.putExtra(ExtraActivity.ITEM, mItem);
+      			startActivityForResult(intent, ExtraActivity.REQUEST_CODE);
+      		}
+      	});
+      	mBack.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+      		
+      	});
+      	updateUI();
+    }
+    
     private void updateUI(){
         if(mItem.getFirstMark() != -1){
         	date.setTime(mItem.getFirstMark());
@@ -166,6 +244,33 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
         	date.setTime(mItem.getFourthMark());
         	fourthText.setText(fmt.format(date));
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.review_menu , menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        
+		HBBDialog dialog = new HBBDialog(this);
+		dialog.setCancelable(false);
+		Message msg = mHandler.obtainMessage();
+		msg.what = CLEAR_DIALOG;
+		dialog.setDismissMessage(msg);
+		dialog.setTitle(getResources().getString(
+				R.string.clearDialog_title));
+		dialog.setExtra(getResources().getString(
+				R.string.clearDialog_extra));
+		dialog.setButtonsText(
+				getResources().getString(
+							R.string.clearDialog_positive),
+				getResources().getString(
+								R.string.clearDialog_negative));
+		dialog.show();
+    		return true;
     }
     public void PrepairPlayer(){
     	mPlayer = new MediaPlayer();
@@ -200,14 +305,14 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 			case R.id.play:
 				if(isPlaying && mPlayer.isPlaying()){
 					mPlayer.pause();
-					play.setImageResource(android.R.drawable.ic_media_play);
+					mPlay.setImageResource(android.R.drawable.ic_media_play);
 				}
 				else{
 					if(isReady){
 						mPlayer.start();
 						isPlaying = true;
 						mHandler.postDelayed(run, 100);
-						play.setImageResource(android.R.drawable.ic_media_pause);
+						mPlay.setImageResource(android.R.drawable.ic_media_pause);
 					}
 
 				}
@@ -241,7 +346,6 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 
 	@Override
 	public void onProgressChanged(SeekBar view, int position, boolean fromUser) {
-		
 		if(isReady){
 			
 			if(fromUser){
@@ -267,9 +371,10 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 	public void onCompletion(MediaPlayer arg0) {
 			isPlaying = false;
 			seekBar.setProgress(0);
-			play.setImageResource(android.R.drawable.ic_media_play);
+			mPlay.setImageResource(android.R.drawable.ic_media_play);
 				
 	}
+	
 	@Override
 	public void onPrepared(MediaPlayer arg0) {
 		
@@ -284,7 +389,6 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 
 		@Override
 		public void run() {
-			Log.e("tag", "palying progress");
 			if(isPlaying && mPlayer.isPlaying()){
 				seekBar.setProgress(mPlayer.getCurrentPosition());
 				mHandler.postDelayed(this, 100);

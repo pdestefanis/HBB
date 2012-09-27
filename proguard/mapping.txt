@@ -1,17 +1,19 @@
 ps.age.hbb.ExtraActivity -> ps.age.hbb.ExtraActivity:
     java.lang.String TAG -> a
-    android.widget.Button mSave -> b
-    android.widget.EditText mProblem -> c
-    android.widget.EditText mOther -> d
-    android.widget.EditText mID -> e
-    android.widget.RadioGroup cryGroup -> f
-    android.widget.RadioGroup ventilationGroup -> g
-    android.widget.Spinner mPrimary -> h
-    ps.age.hbb.core.RecordItem mItem -> i
-    java.lang.String selectedPrimary -> j
-    org.json.JSONArray mForm -> k
-    android.widget.ArrayAdapter mAdapter -> l
-    android.view.View$OnClickListener listener -> m
+    android.widget.ImageView mBack -> b
+    android.widget.Button mSave -> c
+    android.widget.EditText mProblem -> d
+    android.widget.EditText mOther -> e
+    android.widget.EditText mID -> f
+    android.widget.RadioGroup cryGroup -> g
+    android.widget.RadioGroup ventilationGroup -> h
+    android.widget.Spinner mPrimary -> i
+    ps.age.hbb.core.RecordItem mItem -> j
+    android.widget.ToggleButton mAlive -> k
+    java.lang.String selectedPrimary -> l
+    org.json.JSONArray mForm -> m
+    android.widget.ArrayAdapter mAdapter -> n
+    android.view.View$OnClickListener listener -> o
     void onCreate(android.os.Bundle) -> onCreate
     void loadForm() -> a
     void saveForm() -> b
@@ -24,16 +26,22 @@ ps.age.hbb.ExtraActivity$2 -> ps.age.hbb.b:
     ps.age.hbb.ExtraActivity this$0 -> a
     void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
     void onNothingSelected(android.widget.AdapterView) -> onNothingSelected
+ps.age.hbb.ExtraActivity$3 -> ps.age.hbb.c:
+    ps.age.hbb.ExtraActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+ps.age.hbb.ExtraActivity$4 -> ps.age.hbb.d:
+    ps.age.hbb.ExtraActivity this$0 -> a
+    void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
 ps.age.hbb.HBBActivity -> ps.age.hbb.HBBActivity:
-    java.lang.String TAG -> a
-    android.media.MediaPlayer mPlayer -> b
-    android.os.Handler mHandler -> c
-    ps.age.hbb.core.RecordItem mItem -> d
-    android.widget.ImageView play -> e
-    android.widget.ImageView first -> f
-    android.widget.ImageView second -> g
-    android.widget.ImageView third -> h
-    android.widget.ImageView fourth -> i
+    android.media.MediaPlayer mPlayer -> a
+    android.os.Handler mHandler -> b
+    ps.age.hbb.core.RecordItem mItem -> c
+    android.widget.ImageView mBack -> d
+    android.widget.ImageView mPlay -> e
+    android.widget.ImageView mFirst -> f
+    android.widget.ImageView mSecond -> g
+    android.widget.ImageView mThird -> h
+    android.widget.ImageView mFourth -> i
     android.widget.SeekBar seekBar -> j
     android.widget.TextView firstText -> k
     android.widget.TextView secondText -> l
@@ -50,31 +58,50 @@ ps.age.hbb.HBBActivity -> ps.age.hbb.HBBActivity:
     android.view.View$OnClickListener listener -> w
     java.lang.Runnable run -> x
     void onCreate(android.os.Bundle) -> onCreate
+    void onConfigurationChanged(android.content.res.Configuration) -> onConfigurationChanged
     void onResume() -> onResume
     void onPause() -> onPause
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    void updateUI() -> b
+    void initializeUI() -> b
+    void updateUI() -> c
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void PrepairPlayer() -> a
     void onProgressChanged(android.widget.SeekBar,int,boolean) -> onProgressChanged
     void onStartTrackingTouch(android.widget.SeekBar) -> onStartTrackingTouch
     void onStopTrackingTouch(android.widget.SeekBar) -> onStopTrackingTouch
     void onCompletion(android.media.MediaPlayer) -> onCompletion
     void onPrepared(android.media.MediaPlayer) -> onPrepared
-    java.lang.Runnable access$0(ps.age.hbb.HBBActivity) -> a
-    void access$1(ps.age.hbb.HBBActivity) -> b
-ps.age.hbb.HBBActivity$1 -> ps.age.hbb.c:
+    boolean access$0(ps.age.hbb.HBBActivity) -> a
+    android.media.MediaPlayer access$1(ps.age.hbb.HBBActivity) -> b
+    android.widget.ImageView access$2(ps.age.hbb.HBBActivity) -> c
+    boolean access$3(ps.age.hbb.HBBActivity) -> d
+    void access$4(ps.age.hbb.HBBActivity,boolean) -> a
+    android.os.Handler access$5(ps.age.hbb.HBBActivity) -> e
+    java.lang.Runnable access$6(ps.age.hbb.HBBActivity) -> f
+    ps.age.hbb.core.RecordItem access$7(ps.age.hbb.HBBActivity) -> g
+    void access$8(ps.age.hbb.HBBActivity) -> h
+    android.widget.SeekBar access$9(ps.age.hbb.HBBActivity) -> i
+    ps.age.util.DBWraper access$10(ps.age.hbb.HBBActivity) -> j
+ps.age.hbb.HBBActivity$1 -> ps.age.hbb.e:
     ps.age.hbb.HBBActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-ps.age.hbb.HBBActivity$2 -> ps.age.hbb.d:
+ps.age.hbb.HBBActivity$2 -> ps.age.hbb.f:
     ps.age.hbb.HBBActivity this$0 -> a
     void run() -> run
-ps.age.hbb.HBBActivity$3 -> ps.age.hbb.e:
+ps.age.hbb.HBBActivity$3 -> ps.age.hbb.g:
+    ps.age.hbb.HBBActivity this$0 -> a
+    void handleMessage(android.os.Message) -> handleMessage
+ps.age.hbb.HBBActivity$4 -> ps.age.hbb.h:
+    ps.age.hbb.HBBActivity this$0 -> a
+    void run() -> run
+ps.age.hbb.HBBActivity$5 -> ps.age.hbb.i:
     ps.age.hbb.HBBActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-ps.age.hbb.HBBActivity$4 -> ps.age.hbb.f:
+ps.age.hbb.HBBActivity$6 -> ps.age.hbb.j:
     ps.age.hbb.HBBActivity this$0 -> a
-    void run() -> run
-ps.age.hbb.HBBDialog -> ps.age.hbb.g:
+    void onClick(android.view.View) -> onClick
+ps.age.hbb.HBBDialog -> ps.age.hbb.k:
     android.widget.TextView mTitle -> a
     android.widget.TextView mExtra -> b
     android.widget.Button mPositive -> c
@@ -85,11 +112,15 @@ ps.age.hbb.HBBDialog -> ps.age.hbb.g:
     void setExtra(java.lang.String) -> b
     void setButtonsText(java.lang.String,java.lang.String) -> a
     void setDismissMessage(android.os.Message) -> setDismissMessage
-ps.age.hbb.HBBDialog$1 -> ps.age.hbb.h:
+ps.age.hbb.HBBDialog$1 -> ps.age.hbb.l:
     ps.age.hbb.HBBDialog this$0 -> a
     void onClick(android.view.View) -> onClick
 ps.age.hbb.HelpActivity -> ps.age.hbb.HelpActivity:
+    android.widget.ImageView mBack -> a
     void onCreate(android.os.Bundle) -> onCreate
+ps.age.hbb.HelpActivity$1 -> ps.age.hbb.m:
+    ps.age.hbb.HelpActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
 ps.age.hbb.ListActivity -> ps.age.hbb.ListActivity:
     java.lang.String TAG -> a
     java.util.ArrayList mList -> b
@@ -97,33 +128,49 @@ ps.age.hbb.ListActivity -> ps.age.hbb.ListActivity:
     android.app.ProgressDialog mProgressDialog -> d
     android.widget.ListView listView -> e
     android.widget.ImageView syncView -> f
-    android.view.View$OnClickListener listener -> g
+    android.os.Handler mHandler -> g
+    ps.age.hbb.ListActivity$MenuAdapter mAdapter -> h
+    android.widget.ImageView mBack -> i
+    android.view.View$OnClickListener listener -> j
     void onCreate(android.os.Bundle) -> onCreate
+    void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
+    boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
     void showDialog(java.lang.String,java.lang.String) -> a
     void showError(java.lang.String) -> a
+    void createDeleteDialog(int) -> a
+    void deleteRecord(int) -> b
     android.app.ProgressDialog access$0(ps.age.hbb.ListActivity) -> a
-    android.widget.ListView access$1(ps.age.hbb.ListActivity) -> b
-    java.text.DateFormat access$2(ps.age.hbb.ListActivity) -> c
-ps.age.hbb.ListActivity$1 -> ps.age.hbb.i:
+    void access$1(ps.age.hbb.ListActivity,ps.age.hbb.ListActivity$MenuAdapter) -> a
+    android.widget.ListView access$2(ps.age.hbb.ListActivity) -> b
+    ps.age.hbb.ListActivity$MenuAdapter access$3(ps.age.hbb.ListActivity) -> c
+    java.text.DateFormat access$4(ps.age.hbb.ListActivity) -> d
+    void access$5(ps.age.hbb.ListActivity,int) -> a
+ps.age.hbb.ListActivity$1 -> ps.age.hbb.n:
     ps.age.hbb.ListActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-ps.age.hbb.ListActivity$2 -> ps.age.hbb.j:
+ps.age.hbb.ListActivity$2 -> ps.age.hbb.o:
+    ps.age.hbb.ListActivity this$0 -> a
+    void handleMessage(android.os.Message) -> handleMessage
+ps.age.hbb.ListActivity$3 -> ps.age.hbb.p:
     ps.age.hbb.ListActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-ps.age.hbb.ListActivity$LoadListTask -> ps.age.hbb.k:
+ps.age.hbb.ListActivity$4 -> ps.age.hbb.q:
+    ps.age.hbb.ListActivity this$0 -> a
+    boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long) -> onItemLongClick
+ps.age.hbb.ListActivity$LoadListTask -> ps.age.hbb.r:
     ps.age.hbb.ListActivity this$0 -> a
     java.util.ArrayList doInBackground(java.lang.Void[]) -> a
     void onPostExecute(java.util.ArrayList) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-ps.age.hbb.ListActivity$MenuAdapter -> ps.age.hbb.l:
+ps.age.hbb.ListActivity$MenuAdapter -> ps.age.hbb.s:
     android.content.Context context -> a
     int layoutResourceId -> b
     ps.age.hbb.core.RecordItem[] data -> c
     java.util.Date date -> d
     ps.age.hbb.ListActivity this$0 -> e
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-ps.age.hbb.ListActivity$UploadTask -> ps.age.hbb.m:
+ps.age.hbb.ListActivity$UploadTask -> ps.age.hbb.t:
     ps.age.hbb.ListActivity this$0 -> a
     java.lang.Boolean doInBackground(java.lang.Void[]) -> a
     void onPostExecute(java.lang.Boolean) -> a
@@ -135,7 +182,7 @@ ps.age.hbb.MainActivity -> ps.age.hbb.MainActivity:
     android.widget.Button mHelp -> c
     android.view.View$OnClickListener listener -> d
     void onCreate(android.os.Bundle) -> onCreate
-ps.age.hbb.MainActivity$1 -> ps.age.hbb.n:
+ps.age.hbb.MainActivity$1 -> ps.age.hbb.u:
     ps.age.hbb.MainActivity this$0 -> a
     void onClick(android.view.View) -> onClick
 ps.age.hbb.NoteActivity -> ps.age.hbb.NoteActivity:
@@ -145,19 +192,19 @@ ps.age.hbb.NoteActivity -> ps.age.hbb.NoteActivity:
     ps.age.util.DBWraper mWraper -> d
     android.view.View$OnClickListener listener -> e
     void onCreate(android.os.Bundle) -> onCreate
-ps.age.hbb.NoteActivity$1 -> ps.age.hbb.o:
+ps.age.hbb.NoteActivity$1 -> ps.age.hbb.v:
     ps.age.hbb.NoteActivity this$0 -> a
     void onClick(android.view.View) -> onClick
 ps.age.hbb.RecordActivity -> ps.age.hbb.RecordActivity:
-    java.lang.String tag -> j
-    android.os.Handler mHandler -> a
-    android.media.MediaRecorder mRecorder -> b
-    ps.age.hbb.core.MediaErrorBroadcastReceiver mReceiver -> c
-    android.widget.Button mRecord -> d
-    android.widget.TextView systemTime -> e
-    android.widget.TextView elapsedTime -> f
-    android.widget.TextView remainingTime -> g
-    ps.age.hbb.core.RecordItem mItem -> h
+    android.os.Handler mHandler -> b
+    android.media.MediaRecorder mRecorder -> c
+    ps.age.hbb.core.MediaErrorBroadcastReceiver mReceiver -> d
+    android.widget.Button mRecord -> e
+    android.widget.ImageView mBack -> f
+    android.widget.TextView systemTime -> g
+    android.widget.TextView elapsedTime -> h
+    android.widget.TextView remainingTime -> i
+    ps.age.hbb.core.RecordItem mItem -> j
     java.text.DateFormat fmt -> k
     java.text.SimpleDateFormat timerFormat -> l
     java.lang.String tmpPath -> m
@@ -168,7 +215,7 @@ ps.age.hbb.RecordActivity -> ps.age.hbb.RecordActivity:
     long totalTime -> r
     float secSizeInBlocks -> s
     android.view.View$OnClickListener listener -> t
-    java.lang.Runnable timeRunnable -> i
+    java.lang.Runnable timeRunnable -> a
     android.media.MediaRecorder$OnInfoListener infoListener -> u
     void onCreate(android.os.Bundle) -> onCreate
     void onStop() -> onStop
@@ -179,29 +226,36 @@ ps.age.hbb.RecordActivity -> ps.age.hbb.RecordActivity:
     void onError() -> a
     void onReady() -> b
     boolean access$0(ps.age.hbb.RecordActivity) -> a
-    void access$1(ps.age.hbb.RecordActivity) -> b
-    java.text.DateFormat access$2(ps.age.hbb.RecordActivity) -> c
-    long access$3(ps.age.hbb.RecordActivity) -> d
-    void access$4(ps.age.hbb.RecordActivity,long) -> a
-    long access$5(ps.age.hbb.RecordActivity) -> e
-    java.text.SimpleDateFormat access$6(ps.age.hbb.RecordActivity) -> f
-    int access$7(ps.age.hbb.RecordActivity) -> g
-    float access$8(ps.age.hbb.RecordActivity) -> h
-    java.lang.String access$9(ps.age.hbb.RecordActivity) -> i
-    void access$10(ps.age.hbb.RecordActivity) -> j
-    void access$11(ps.age.hbb.RecordActivity) -> k
-ps.age.hbb.RecordActivity$1 -> ps.age.hbb.p:
+    android.os.Handler access$1(ps.age.hbb.RecordActivity) -> b
+    void access$2(ps.age.hbb.RecordActivity) -> c
+    android.widget.TextView access$3(ps.age.hbb.RecordActivity) -> d
+    java.text.DateFormat access$4(ps.age.hbb.RecordActivity) -> e
+    long access$5(ps.age.hbb.RecordActivity) -> f
+    void access$6(ps.age.hbb.RecordActivity,long) -> a
+    long access$7(ps.age.hbb.RecordActivity) -> g
+    android.widget.TextView access$8(ps.age.hbb.RecordActivity) -> h
+    java.text.SimpleDateFormat access$9(ps.age.hbb.RecordActivity) -> i
+    int access$10(ps.age.hbb.RecordActivity) -> j
+    float access$11(ps.age.hbb.RecordActivity) -> k
+    android.widget.TextView access$12(ps.age.hbb.RecordActivity) -> l
+    void access$13(ps.age.hbb.RecordActivity) -> m
+    ps.age.hbb.core.RecordItem access$14(ps.age.hbb.RecordActivity) -> n
+    void access$15(ps.age.hbb.RecordActivity) -> o
+ps.age.hbb.RecordActivity$1 -> ps.age.hbb.w:
     ps.age.hbb.RecordActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-ps.age.hbb.RecordActivity$2 -> ps.age.hbb.q:
+ps.age.hbb.RecordActivity$2 -> ps.age.hbb.x:
     java.util.Date date -> a
     int prevSec -> b
     ps.age.hbb.RecordActivity this$0 -> c
     void run() -> run
-ps.age.hbb.RecordActivity$3 -> ps.age.hbb.r:
+ps.age.hbb.RecordActivity$3 -> ps.age.hbb.y:
     ps.age.hbb.RecordActivity this$0 -> a
     void onInfo(android.media.MediaRecorder,int,int) -> onInfo
-ps.age.hbb.RecordActivity$4 -> ps.age.hbb.s:
+ps.age.hbb.RecordActivity$4 -> ps.age.hbb.z:
+    ps.age.hbb.RecordActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
+ps.age.hbb.RecordActivity$5 -> ps.age.hbb.aa:
     ps.age.hbb.RecordActivity this$0 -> a
     void handleMessage(android.os.Message) -> handleMessage
 ps.age.hbb.core.MediaErrorBroadcastReceiver -> ps.age.hbb.a.a:
@@ -221,6 +275,7 @@ ps.age.hbb.core.RecordItem -> ps.age.hbb.a.c:
     java.lang.String path -> g
     java.lang.String extra -> h
     long time -> i
+    long uploadTime -> j
     long getId() -> a
     void setId(long) -> a
     long getFirstMark() -> b
@@ -238,7 +293,9 @@ ps.age.hbb.core.RecordItem -> ps.age.hbb.a.c:
     void setExtra(java.lang.String) -> b
     long getTime() -> h
     void setTime(long) -> f
-    int getTotalMarks() -> i
+    void setUploadTime(long) -> g
+    long getUploadTime() -> i
+    int getTotalMarks() -> j
 ps.age.util.DBWraper -> ps.age.a.a:
     java.lang.String TAG -> a
     android.content.Context context -> c
@@ -246,6 +303,7 @@ ps.age.util.DBWraper -> ps.age.a.a:
     ps.age.util.DBWraper$OpenHelper openHelper -> b
     boolean insertRecord(ps.age.hbb.core.RecordItem) -> a
     boolean updateRecord(ps.age.hbb.core.RecordItem) -> b
+    void deleteRecord(ps.age.hbb.core.RecordItem) -> c
     java.util.ArrayList getRecordsList() -> a
     void close() -> b
 ps.age.util.DBWraper$OpenHelper -> ps.age.a.b:

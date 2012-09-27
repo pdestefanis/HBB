@@ -12,34 +12,29 @@ ps.age.hbb.ExtraActivity:
     protected static final int ID_VENTILATION
     protected static final int ID_OTHER
     protected static final int ID_PROBLEM
+    protected static final int ID_ALIVE
 ps.age.hbb.HBBActivity:
-    long firstTime
-    long secondTime
-    long thirdTime
-    long fourthTime
-ps.age.hbb.MediaErrorBroadcastReceiver
-ps.age.hbb.MediaRecordEventListener
+    public static final int CLEAR_DIALOG
+ps.age.hbb.ListActivity:
+    public static final int DELETE_DIALOG
 ps.age.hbb.R
 ps.age.hbb.R$array
 ps.age.hbb.R$attr
 ps.age.hbb.R$drawable
 ps.age.hbb.R$id
 ps.age.hbb.R$layout
+ps.age.hbb.R$menu
 ps.age.hbb.R$string
 ps.age.hbb.R$style
 ps.age.hbb.RecordActivity:
     private static final long updateSleep
     private static final int DIALOG_STOP
     private static final int DIALOG_NOTE
-ps.age.hbb.core.DBWraper
-ps.age.hbb.core.DBWraper$OpenHelper
 ps.age.hbb.core.MediaErrorBroadcastReceiver:
     public static final java.lang.String ACTION_PHONE_STATE_CHANGED
 ps.age.hbb.core.RecordItem:
     private static final long serialVersionUID
     60:60:public int getLength()
-ps.age.hbb.net.WebClient
-ps.age.hbb.net.WebClient$LogListener
 ps.age.util.DBWraper:
     private static final java.lang.String DATABASE_NAME
     private static final int DATABASE_VERSION
@@ -52,6 +47,7 @@ ps.age.util.DBWraper:
     public static final java.lang.String RECORD_MARK_FOURTH
     public static final java.lang.String RECORD_ID
     public static final java.lang.String RECORD_TIME
+    public static final java.lang.String RECORD_TIME_UPLOAD
 ps.age.util.WebClient:
     public static final java.lang.String USER_NAME
     public static final java.lang.String AUTH_KEY
