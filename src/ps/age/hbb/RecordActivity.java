@@ -22,6 +22,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,7 +33,7 @@ import android.widget.Toast;
 @SuppressLint("HandlerLeak")
 public class RecordActivity extends Activity implements
 		MediaRecordEventListener {
-
+	public static final String tag = RecordActivity.class.getSimpleName();
 
 	private Handler mHandler;
 	private MediaRecorder mRecorder;
@@ -106,6 +107,9 @@ public class RecordActivity extends Activity implements
 										R.string.noteDialog_negative));
 						dialog.show();
 					}
+					else{
+						mRecord.setClickable(true);
+					}
 					break;
 				case DIALOG_NOTE:
 					if (msg.arg1 == RESULT_OK) {
@@ -143,6 +147,7 @@ public class RecordActivity extends Activity implements
 	@Override
 	public void onStop() {
 		super.onStop();
+		Log.e(tag, "onStop");
 		if (isFinishing()) {
 
 			if (isRecording) {
@@ -157,11 +162,11 @@ public class RecordActivity extends Activity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.e(tag, "onActivity Result");
 		if ((requestCode == ExtraActivity.REQUEST_CODE) && (data != null)) {
 			mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
 			saveItem();
 		}
-		unregisterReceiver(mReceiver);
 		finish();
 		
 	}
@@ -206,6 +211,15 @@ public class RecordActivity extends Activity implements
 		mItem.setTime(startTime);
 		isRecording = true;
 		mRecord.setText(R.string.button_stop);
+		/*
+		 * Add delay to ensure that the recoding already started
+		 */
+		mHandler.postDelayed(new Runnable(){
+			@Override
+			public void run(){
+				mRecord.setClickable(true);
+			}
+		}, 500);
 	}
 
 	private void stopRecording() {
@@ -221,6 +235,7 @@ public class RecordActivity extends Activity implements
 
 		@Override
 		public void onClick(View v) {
+			mRecord.setClickable(false);
 			if (isRecording) {
 				HBBDialog dialog = new HBBDialog(RecordActivity.this);
 				dialog.setCancelable(false);

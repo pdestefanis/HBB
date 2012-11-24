@@ -1,6 +1,8 @@
 android.annotation.SuppressLint
 android.annotation.TargetApi
 ps.age.hbb.BuildConfig
+ps.age.hbb.DBWraper
+ps.age.hbb.DBWraper$OpenHelper
 ps.age.hbb.ExtraActivity:
     public static final java.lang.String ITEM
     public static final int REQUEST_CODE
@@ -30,11 +32,27 @@ ps.age.hbb.RecordActivity:
     private static final long updateSleep
     private static final int DIALOG_STOP
     private static final int DIALOG_NOTE
+ps.age.hbb.RecordItem
+ps.age.hbb.WebClient
+ps.age.hbb.WebClient$LogListener
+ps.age.hbb.core.DBWraper
+ps.age.hbb.core.DBWraper$OpenHelper
 ps.age.hbb.core.MediaErrorBroadcastReceiver:
     public static final java.lang.String ACTION_PHONE_STATE_CHANGED
 ps.age.hbb.core.RecordItem:
     private static final long serialVersionUID
-    60:60:public int getLength()
+    public static final java.lang.String EXTRA_ID
+    public static final java.lang.String EXTRA_CRY
+    public static final java.lang.String EXTRA_VENTILATION
+    public static final java.lang.String EXTRA_OTHER
+    public static final java.lang.String EXTRA_PROBLEM
+    public static final java.lang.String EXTRA_PRIMARY
+    public static final java.lang.String EXTRA_ALIVE
+    81:81:public int getLength()
+    177:181:private void writeObject(java.io.ObjectOutputStream)
+    184:194:private void readObject(java.io.ObjectInputStream)
+ps.age.hbb.net.WebClient
+ps.age.hbb.net.WebClient$LogListener
 ps.age.util.DBWraper:
     private static final java.lang.String DATABASE_NAME
     private static final int DATABASE_VERSION

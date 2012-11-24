@@ -1,16 +1,15 @@
 package ps.age.hbb;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import ps.age.hbb.core.RecordItem;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -26,7 +25,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class ExtraActivity extends Activity {
-	protected static final String TAG = ExtraActivity.class.getSimpleName();
+	protected static final String tag = ExtraActivity.class.getSimpleName();
 	public static final String ITEM   = "item";
 	public static final int REQUEST_CODE = 620976104;
 	
@@ -42,7 +41,6 @@ public class ExtraActivity extends Activity {
 	ToggleButton	mAlive;
 	
 	String selectedPrimary;
-	JSONArray mForm;
 	 ArrayAdapter<CharSequence> mAdapter;
 	/*
 	 * JSON String headers
@@ -60,6 +58,9 @@ public class ExtraActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.extra);
+        try{
+        Log.e(tag, "onCreate");    	
+
         mSave 			 = (Button) findViewById(R.id.button_save);
         cryGroup 		 = (RadioGroup) findViewById(R.id.radioCry);
         ventilationGroup = (RadioGroup) findViewById(R.id.radioVentilation);
@@ -111,11 +112,27 @@ public class ExtraActivity extends Activity {
         mItem = (RecordItem) getIntent().getSerializableExtra(ITEM);
         mSave.setOnClickListener(listener);
         if(mItem.getExtra()!=null){
-        	try {
 				loadForm();
-			} catch (JSONException e) {
-				e.printStackTrace();				
-			}
+        }
+        final View activityRootView = findViewById(R.id.extra_root);
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+                Log.e(tag, "onGlobalLayoutCHange, diff: "+String.valueOf(heightDiff));
+                if (heightDiff > 100) { 
+                	// if more than 100 pixels, its probably a keyboard...
+                	mSave.setVisibility(View.GONE);
+
+                }
+                else {
+                	mSave.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
+        }catch(Exception e){
+        	Log.e(tag, e.toString());
         }
     }
     private OnClickListener listener = new OnClickListener(){
@@ -132,10 +149,55 @@ public class ExtraActivity extends Activity {
 		}
     	
     };
-    private void loadForm() throws JSONException{
-    	mForm = new JSONArray(mItem.getExtra());
-    	for(int i=0;i<mForm.length();i++){
-    		JSONObject obj = mForm.getJSONObject(i);
+    private void loadForm() {
+		String[] keys = mItem.getExtraKeys();
+		if(keys == null)
+			return;
+    	for(String key: keys){
+
+    		String value = mItem.getExtraString(key);
+    		if(key.equals(RecordItem.EXTRA_ID)){
+    			mID.setText(value);
+    			continue;
+    		}
+    		if(key.equals(RecordItem.EXTRA_CRY)){
+    			((RadioButton)cryGroup.findViewWithTag(value)).setChecked(true);
+    			continue;
+    		}
+    		if(key.equals(RecordItem.EXTRA_VENTILATION)){
+    			((RadioButton)ventilationGroup.findViewWithTag(value)).setChecked(true);
+    			continue;
+    		}
+    		if(key.equals(RecordItem.EXTRA_OTHER)){
+				mOther.setText(value);
+				continue;
+    		}
+    		if(key.equals(RecordItem.EXTRA_PROBLEM)){
+    			mProblem.setText(value);
+    			continue;
+    		}
+    		if(key.equals(RecordItem.EXTRA_PRIMARY)){
+    			mPrimary.setSelection(mAdapter.getPosition(value), false);
+    			continue;
+    		}
+    		if(key.equals(RecordItem.EXTRA_ALIVE)){
+    			if(value.equals(getResources().getString(R.string.alive))){
+    				mAlive.setChecked(true);
+    				mPrimary.setEnabled(false);
+    				mOther.setEnabled(false);
+    			}
+    			else{  				
+        			if(value.equals(getResources().getString(R.string.dead))){
+        				mAlive.setChecked(false);
+        			}	
+        		}
+    			continue;
+    		}   		
+
+    	}
+    
+/*    	for(int i=0;i<mForm.length();i++){
+    		JSONObject obj = mForm.get(i);
     		String value = obj.getString(VALUE);
     		int id  = obj.getInt(ID);
     		
@@ -177,52 +239,69 @@ public class ExtraActivity extends Activity {
     		}
     		
     	}
+*/
+   }
+    @Override
+    protected void onResume(){
+    	super.onResume();
+        Log.e(tag, "onResume");    	
+    	
     }
+    @Override
+    protected void onPause(){
+    	super.onPause();
+        Log.e(tag, "onPause");    	
+
+    }
+
+    @Override
+    protected void onStop(){
+    	super.onStop();
+        Log.e(tag, "onStop");    	
+    }
+    @Override
+    public void onDestroy(){
+    	super.onDestroy();
+        Log.e(tag, "onDestroy");    	
+    	
+    }
+
     private void saveForm(){
-    	mForm = new JSONArray();
+    	
         if(mID.getText().toString().length() != 0 ){
-        	appendToArray(ID_IDENT,	mID.getText().toString());
+        	mItem.putExtraString(RecordItem.EXTRA_ID,	mID.getText().toString());
         }
         RadioButton btn = (RadioButton) findViewById(cryGroup.getCheckedRadioButtonId());
-    	appendToArray(ID_CRY,	btn.getText().toString());
+    	mItem.putExtraString(RecordItem.EXTRA_CRY,	btn.getText().toString());
+
         btn = (RadioButton) findViewById(ventilationGroup.getCheckedRadioButtonId());
-    	appendToArray(ID_VENTILATION,	btn.getText().toString());
+    	mItem.putExtraString(RecordItem.EXTRA_VENTILATION,	btn.getText().toString());
+
     	if(mAlive.isChecked()){
-        	appendToArray(ID_ALIVE,	mAlive.getTextOn().toString());
+        	mItem.putExtraString(RecordItem.EXTRA_ALIVE,	mAlive.getTextOn().toString());
     	}
     	else{
-        	appendToArray(ID_ALIVE,	mAlive.getTextOff().toString());
+        	mItem.putExtraString(RecordItem.EXTRA_ALIVE,	mAlive.getTextOff().toString());
+
   		
     		/*
     		 * Check if the user selected a value in the primary spinner
     		 */
-    		if(selectedPrimary != null){		        	
-    			appendToArray(ID_PRIMARY,selectedPrimary);
+    		if(selectedPrimary != null){	
+            	mItem.putExtraString(RecordItem.EXTRA_PRIMARY,	selectedPrimary);
+    			
     		}
     		/*
-    		 * Check if their is data in the editText field
+    		 * Check if there is data in the editText field
     		 */
     		if(mOther.getText().toString().trim().length() > 0){
-    			appendToArray(ID_OTHER,mOther.getText().toString().trim());
+            	mItem.putExtraString(RecordItem.EXTRA_OTHER, mOther.getText().toString().trim());
     		}
     	}
-        if(mProblem.getText().toString().trim().length() > 0){;
-	        appendToArray(ID_PROBLEM,mProblem.getText().toString().trim());
+        if(mProblem.getText().toString().trim().length() > 0){
+        	mItem.putExtraString(RecordItem.EXTRA_PROBLEM,mProblem.getText().toString().trim());
         }		        
-	    mItem.setExtra(mForm.toString());
-
+        
     }
-    private void appendToArray(int id,String value){
-    	if(mForm == null)
-    		mForm = new JSONArray();
-    	JSONObject object = new JSONObject();
-    	try {
-			object.put(ID, id);
-	    	object.put(VALUE, value);
-		} catch (JSONException e) {
 
-			e.printStackTrace();
-		}
-    	mForm.put(object);
-    }
 }

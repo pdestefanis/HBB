@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,13 +14,13 @@ public class MainActivity extends Activity {
 	Button mRecord;
 	Button mList;
 	Button mHelp;
-	
+	Handler mHandler;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+        mHandler = new Handler();
         mRecord = (Button) findViewById(R.id.recordButton);
         mList   = (Button) findViewById(R.id.listButton);
         mHelp   = (Button) findViewById(R.id.helpButton);
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
         mRecord.setOnClickListener(listener);
         mList.setOnClickListener(listener);
         mHelp.setOnClickListener(listener);
+        
     }
     
   final OnClickListener listener = new OnClickListener(){
@@ -64,5 +66,5 @@ public class MainActivity extends Activity {
 	}
 	  
   };
-  
+ 
 }

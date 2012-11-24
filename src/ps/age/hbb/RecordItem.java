@@ -2,6 +2,9 @@ package ps.age.hbb;
 
 import java.io.Serializable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class RecordItem implements Serializable {
 	/**
 	 * 
@@ -77,7 +80,6 @@ public class RecordItem implements Serializable {
 	public void setExtra(String extra) {
 		this.extra = extra;
 	}
-
 	public long getTime() {
 		return time;
 	}
@@ -99,5 +101,19 @@ public class RecordItem implements Serializable {
 		
 		return total;
 	}
-
+	public String getExtraString(String extra_string){
+		if(extra == null)
+			return null;
+		else{
+			try {
+				JSONObject object = new JSONObject(extra);
+				return object.getString(extra_string);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+	}
 }

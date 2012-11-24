@@ -90,7 +90,7 @@ public class DBWraper {
 				  item.setFourthMark(cursor.getLong(fourth));
 				  list.add(item);
 			  }while(cursor.moveToNext());
-			  
+			  cursor.close();
 		  }
 		  return list;
 	  }

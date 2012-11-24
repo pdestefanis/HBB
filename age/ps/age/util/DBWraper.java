@@ -94,6 +94,7 @@ public class DBWraper {
 				int upload  = cursor.getColumnIndexOrThrow(RECORD_TIME_UPLOAD);
 				list = new ArrayList<RecordItem>();
 				do {
+					
 					RecordItem item = new RecordItem();
 					item.setId(cursor.getLong(id));
 					item.setTime(cursor.getLong(time));

@@ -243,19 +243,24 @@ public class ListActivity extends Activity {
 
 	    @Override
 	    public View getView(int position, View convertView, ViewGroup parent) {
-	        View row = convertView;
+	        LinearLayout row = (LinearLayout) convertView;
 	        RecordItem item = data[position];
 	        if(row == null)
 	        {
 
 	            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-	            row = inflater.inflate(layoutResourceId, parent, false);
+	            row = (LinearLayout) inflater.inflate(layoutResourceId, parent, false);
+	        }
 	           LinearLayout view =  ((LinearLayout)row);
 	           date.setTime(item.getTime());
 	           TextView title = (TextView) view.findViewById(R.id.item_title);
 	           title.setText(fmt.format(date));
 	           TextView marks = (TextView) view.findViewById(R.id.item_marks);
-	           
+	           String extra_id = item.getExtraString(RecordItem.EXTRA_ID);
+	           if(extra_id != null){
+	        	   TextView extra_ident = (TextView) view.findViewById(R.id.item_id);
+	        	   extra_ident.setText(extra_id);
+	           }
         	   int totalMarks = item.getTotalMarks();	           
 	           if(item.getUploadTime() == -1){
 	        	   // no mark set
@@ -277,7 +282,6 @@ public class ListActivity extends Activity {
         		   else
         			   marks.setText("");    		   
 	           }
-	        }
 	        
 	        return row;
 	    }

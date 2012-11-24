@@ -30,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ps.age.hbb.R;
-import ps.age.hbb.R.string;
 import ps.age.hbb.core.RecordItem;
 
 import android.content.Context;

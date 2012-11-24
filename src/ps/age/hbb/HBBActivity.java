@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import ps.age.hbb.core.RecordItem;
 import ps.age.util.DBWraper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -18,6 +19,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,8 +31,9 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("HandlerLeak")
 public class HBBActivity extends Activity implements OnSeekBarChangeListener, OnCompletionListener, OnPreparedListener {
-
+	public static final String tag = HBBActivity.class.getSimpleName();
 	public static final int CLEAR_DIALOG = 12456;
 	
 	private MediaPlayer mPlayer;
@@ -60,7 +63,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        Log.e(tag, "onCreate");
         mWraper = new DBWraper(this);
         mItem   = (RecordItem) getIntent().getSerializableExtra("item");
     	fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -89,19 +92,25 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     @Override
     public final void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Log.e(tag, "onConfigurationChanged");    	
+        
         initializeUI();
 	}
     
     @Override
     protected void onResume(){
     	super.onResume();
+        Log.e(tag, "onResume");    	
     	if(mPlayer != null){
-    		mPlayer.getCurrentPosition();
+    		seekBar.setProgress(mPlayer.getCurrentPosition());
     	}
     }
+
     @Override
     public void onPause(){
     	super.onPause();
+        Log.e(tag, "onPause");    	
+  	
 		isPlaying = false;
     	if(isFinishing()){
     		if(mPlayer!= null){
@@ -123,18 +132,32 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     		}.start();
     	}
     	else{
-    		mPlayer.pause();
+    		if(mPlayer.isPlaying())
+    			mPlayer.pause();
 			mPlay.setImageResource(android.R.drawable.ic_media_play);    		
     	}
     }
-    
+    @Override
+    protected void onStop(){
+    	super.onStop();
+        Log.e(tag, "onStop");    	
+    }
+    @Override
+    public void onDestroy(){
+    	super.onDestroy();
+        Log.e(tag, "onDestroy");    	
+    	
+    }
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data){
-    	
+    	Log.e(tag, "onActivityResult");
+    	if(data != null)
+    		Log.e(tag, "intent "+data.toString());
     	if((requestCode == ExtraActivity.REQUEST_CODE) 
     			&& (data != null)){
     		mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
     	}
+    	
     }
     /*
      *  handle UI initialization when the activity is created
@@ -149,9 +172,9 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 		mSecond		= (ImageView) findViewById(R.id.mark2);
 		mThird 		= (ImageView) findViewById(R.id.mark3);
 		mFourth 	= (ImageView) findViewById(R.id.mark4);
-		mBack       = (ImageView) findViewById(R.id.back);
 		endTime     = (TextView) findViewById(R.id.time_end);
 		reviewForm  = (TextView) findViewById(R.id.form_textView);
+		mBack       = (ImageView) findViewById(R.id.back);
 		
     	if(mPlay == null){
     		mPlay     	= (ImageView) findViewById(R.id.play);
@@ -171,6 +194,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     		Drawable draw =mPlay.getDrawable();
     		mPlay     	= (ImageView) findViewById(R.id.play);
     		mPlay.setImageDrawable(draw);
+    		
     		int value = currentTime.getVisibility();
     		CharSequence txt = currentTime.getText();
     		currentTime = (TextView) findViewById(R.id.time_current);
@@ -197,9 +221,10 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     		seekBar 	= (SeekBar) findViewById(R.id.seekBar_player);
     		seekBar.setMax(mPlayer.getDuration());
     		seekBar.setProgress(value);
-    		
+    		date.setTime(mPlayer.getDuration());    		
+    		endTime.setText(fmt.format(date));
     	}
-        
+
       	mPlay.setOnClickListener(listener);
       	mFirst.setOnClickListener(listener);
       	mSecond.setOnClickListener(listener);
@@ -372,6 +397,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 			isPlaying = false;
 			seekBar.setProgress(0);
 			mPlay.setImageResource(android.R.drawable.ic_media_play);
+			currentTime.setText("");
 				
 	}
 	

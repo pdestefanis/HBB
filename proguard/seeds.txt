@@ -8,8 +8,6 @@ ps.age.hbb.ListActivity
 ps.age.hbb.ListActivity: ListActivity()
 ps.age.hbb.MainActivity
 ps.age.hbb.MainActivity: MainActivity()
-ps.age.hbb.NoteActivity
-ps.age.hbb.NoteActivity: NoteActivity()
 ps.age.hbb.R$array: int primary_array
 ps.age.hbb.R$drawable: int background_marks
 ps.age.hbb.R$drawable: int background_nomarks
@@ -40,9 +38,11 @@ ps.age.hbb.R$id: int dialog_extra
 ps.age.hbb.R$id: int dialog_title
 ps.age.hbb.R$id: int elapsedTime_Value
 ps.age.hbb.R$id: int elapsedTime_lable
+ps.age.hbb.R$id: int extra_root
 ps.age.hbb.R$id: int form_textView
 ps.age.hbb.R$id: int helpButton
 ps.age.hbb.R$id: int id_editText
+ps.age.hbb.R$id: int item_id
 ps.age.hbb.R$id: int item_marks
 ps.age.hbb.R$id: int item_title
 ps.age.hbb.R$id: int items_list
@@ -55,7 +55,6 @@ ps.age.hbb.R$id: int mark3
 ps.age.hbb.R$id: int mark3_time
 ps.age.hbb.R$id: int mark4
 ps.age.hbb.R$id: int mark4_time
-ps.age.hbb.R$id: int note
 ps.age.hbb.R$id: int other_editText
 ps.age.hbb.R$id: int play
 ps.age.hbb.R$id: int primary_spinner
@@ -88,7 +87,6 @@ ps.age.hbb.R$layout: int hpp_dialog
 ps.age.hbb.R$layout: int list
 ps.age.hbb.R$layout: int list_item
 ps.age.hbb.R$layout: int main
-ps.age.hbb.R$layout: int note
 ps.age.hbb.R$layout: int record
 ps.age.hbb.R$menu: int list_menu
 ps.age.hbb.R$menu: int review_menu
