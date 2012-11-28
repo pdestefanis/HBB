@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ps.age.hbb.core.RecordItem;
-import ps.age.util.DBWraper;
-import ps.age.util.WebClient;
+import ps.age.hbb.core.DBWraper;
+import ps.age.hbb.net.WebClient;
 
 
 import android.annotation.SuppressLint;
@@ -294,9 +294,17 @@ public class ListActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			WebClient.setContext(getApplicationContext());
-			if(WebClient.synchronizeRecords("usrName", "key", mList)){
+			ArrayList<RecordItem> list = new ArrayList<RecordItem>();
+			
+			for(RecordItem item : mList){
+				if(item.isReviewed())
+					list.add(item);
+			}
+				
+				
+			if(WebClient.synchronizeRecords("usrName", "key", list)){
 				DBWraper wraper = new DBWraper(ListActivity.this);
-				for(RecordItem item : mList){
+				for(RecordItem item : list){
 					item.setUploadTime(System.currentTimeMillis());
 					wraper.updateRecord(item);
 				}

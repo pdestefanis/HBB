@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import ps.age.hbb.core.RecordItem;
-import ps.age.util.DBWraper;
+import ps.age.hbb.core.DBWraper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -77,10 +77,10 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     			if((msg.what == CLEAR_DIALOG) 
     					&& (msg.arg1 == RESULT_OK))
     			{
-    				mItem.setFirstMark(0);
-    				mItem.setSecondMark(0);
-    				mItem.setThirdMark(0);
-    				mItem.setFourthMark(0);
+    				mItem.setMark(0, 0);
+    				mItem.setMark(1, 0);
+    				mItem.setMark(2, 0);
+    				mItem.setMark(3, 0);
     				updateUI();
     			}
     		}
@@ -253,20 +253,20 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
     }
     
     private void updateUI(){
-        if(mItem.getFirstMark() != -1){
-        	date.setTime(mItem.getFirstMark());
+        if(mItem.getMark(0) != -1){
+        	date.setTime(mItem.getMark(0));
         	firstText.setText(fmt.format(date));
         }
-        if(mItem.getSecondMark() != -1){
-        	date.setTime(mItem.getSecondMark());
+        if(mItem.getMark(1) != -1){
+        	date.setTime(mItem.getMark(0));
         	secondText.setText(fmt.format(date));
         }
-        if(mItem.getThirdMark() != -1){
-        	date.setTime(mItem.getThirdMark());
+        if(mItem.getMark(2) != -1){
+        	date.setTime(mItem.getMark(2));
         	thirdText.setText(fmt.format(date));
         }
-        if(mItem.getFourthMark() != -1){
-        	date.setTime(mItem.getFourthMark());
+        if(mItem.getMark(3) != -1){
+        	date.setTime(mItem.getMark(3));
         	fourthText.setText(fmt.format(date));
         }
     }
@@ -345,22 +345,22 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
 				
 			case R.id.mark1:
 				if(isReady){
-					mItem.setFirstMark(mPlayer.getCurrentPosition());
+					mItem.setMark(0, mPlayer.getCurrentPosition());
 				}
 				break;
 			case R.id.mark2:
 				if(isReady){
-					mItem.setSecondMark(mPlayer.getCurrentPosition());
+					mItem.setMark(1, mPlayer.getCurrentPosition());
 				}
 				break;
 			case R.id.mark3:
 				if(isReady){
-					mItem.setThirdMark(mPlayer.getCurrentPosition());
+					mItem.setMark(2, mPlayer.getCurrentPosition());
 				}
 				break;
 			case R.id.mark4:
 				if(isReady){
-					mItem.setFourthMark(mPlayer.getCurrentPosition());
+					mItem.setMark(3, mPlayer.getCurrentPosition());
 				}
 				break;
 			}

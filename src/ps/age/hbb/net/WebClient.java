@@ -88,10 +88,10 @@ public class WebClient {
 		nameValuePairs.add(new BasicNameValuePair(USER_NAME,userName));
 		nameValuePairs.add(new BasicNameValuePair(TIME_CREATED,String.valueOf(item.getTime())));		
 //		nameValuePairs.add(new BasicNameValuePair(TOTAL_LENGTH,String.valueOf(item.getLength())));
-		nameValuePairs.add(new BasicNameValuePair(FIRST_MARK,String.valueOf(item.getFirstMark())));
-		nameValuePairs.add(new BasicNameValuePair(SECOND_MARK, String.valueOf(item.getSecondMark())));
-		nameValuePairs.add(new BasicNameValuePair(THIRD_MARK, String.valueOf(item.getThirdMark())));
-		nameValuePairs.add(new BasicNameValuePair(FOURTH_MARK, String.valueOf(item.getFourthMark())));
+		nameValuePairs.add(new BasicNameValuePair(FIRST_MARK,String.valueOf(item.getMark(0))));
+		nameValuePairs.add(new BasicNameValuePair(SECOND_MARK, String.valueOf(item.getMark(1))));
+		nameValuePairs.add(new BasicNameValuePair(THIRD_MARK, String.valueOf(item.getMark(2))));
+		nameValuePairs.add(new BasicNameValuePair(FOURTH_MARK, String.valueOf(item.getMark(3))));
 		nameValuePairs.add(new BasicNameValuePair(EXTRA, item.getExtra()));
 		return postToServer(uploadURL,nameValuePairs);
 	}

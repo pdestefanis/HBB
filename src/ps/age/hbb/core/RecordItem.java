@@ -1,7 +1,6 @@
 package ps.age.hbb.core;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,14 +23,14 @@ public class RecordItem implements Serializable {
 	public static final String EXTRA_PROBLEM      = "extra_problem";
 	public static final String EXTRA_PRIMARY      = "extra_primary";
 	public static final String EXTRA_ALIVE        = "extra_alive";
+	private static final int   TOTAL_MARKS        = 4;
 	/**
 	 * 
 	 */
 	private long id;
-	private long firstMark = -1;
-	private long secondMark = -1;
-	private long thirdMark = -1;
-	private long fourthMark = -1;
+	
+	long[] marksArray = new long[TOTAL_MARKS];
+
 	private int length;
 	private String path;
 	transient private JSONObject extra = new JSONObject();
@@ -46,37 +45,17 @@ public class RecordItem implements Serializable {
 		this.id = id;
 	}
 
-	public long getFirstMark() {
-		return firstMark;
+	public long getMark(int position){
+		if(position<TOTAL_MARKS){
+			return marksArray[position];
+		}
+		else
+			return -1;
+	}
+	public void setMark(int position, long value) {
+		this.marksArray[position] = value;
 	}
 
-	public void setFirstMark(long firstMark) {
-		this.firstMark = firstMark;
-	}
-
-	public long getSecondMark() {
-		return secondMark;
-	}
-
-	public void setSecondMark(long secondMark) {
-		this.secondMark = secondMark;
-	}
-
-	public long getThirdMark() {
-		return thirdMark;
-	}
-
-	public void setThirdMark(long thirdMark) {
-		this.thirdMark = thirdMark;
-	}
-
-	public long getFourthMark() {
-		return fourthMark;
-	}
-
-	public void setFourthMark(long fourthMark) {
-		this.fourthMark = fourthMark;
-	}
 	public int getLength(){
 		return length;
 	}
@@ -114,7 +93,13 @@ public class RecordItem implements Serializable {
 	public long getTime() {
 		return time;
 	}
-
+	public boolean isReviewed(){
+		long total =  0 ;
+		for( long mark : marksArray){
+			total+=mark;
+		}
+		return (total > 0) ? true : false;
+	}
 	public void setTime(long time) {
 		this.time = time;
 	}
@@ -126,14 +111,11 @@ public class RecordItem implements Serializable {
 	}
 	public int getTotalMarks(){
 		int total = 0;
-		if(firstMark != -1)
-			total++;
-		if(secondMark != -1)
-			total++;
-		if(thirdMark != -1)
-			total++;
-		if(fourthMark != -1)
-			total++;
+		
+		for(long mark : marksArray){
+			if(mark != 0)
+				total++;
+		}
 		
 		
 		return total;

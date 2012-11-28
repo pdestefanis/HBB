@@ -37,10 +37,10 @@ public class DBWraper {
 		  values.put(RECORD_EXTRA, item.getExtra());
 		  values.put(RECORD_TIME, item.getTime());
 		  
-		  values.put(RECORD_MARK_FIRST, item.getFirstMark());
-		  values.put(RECORD_MARK_SECOND, item.getSecondMark());
-		  values.put(RECORD_MARK_THIRD, item.getThirdMark());
-		  values.put(RECORD_MARK_FOURTH, item.getFourthMark());
+		  values.put(RECORD_MARK_FIRST, item.getMark(0));
+		  values.put(RECORD_MARK_SECOND, item.getMark(1));
+		  values.put(RECORD_MARK_THIRD, item.getMark(2));
+		  values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		  
 		  // inserted successfully
 		  if(db.insert(RECORD_TABLE, null, values)!= -1)
@@ -54,10 +54,10 @@ public class DBWraper {
 		  values.put(RECORD_PATH, item.getPath());
 		  values.put(RECORD_EXTRA, item.getExtra());
 		  values.put(RECORD_TIME, item.getTime());
-		  values.put(RECORD_MARK_FIRST, item.getFirstMark());
-		  values.put(RECORD_MARK_SECOND, item.getSecondMark());
-		  values.put(RECORD_MARK_THIRD, item.getThirdMark());
-		  values.put(RECORD_MARK_FOURTH, item.getFourthMark());
+		  values.put(RECORD_MARK_FIRST, item.getMark(0));
+		  values.put(RECORD_MARK_SECOND, item.getMark(1));
+		  values.put(RECORD_MARK_THIRD, item.getMark(2));
+		  values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		  
 		  int numRows = db.update(RECORD_TABLE, values, "_id=?", new String[] { Long.toString(item.getId()) });
 		  if(numRows == 1)
@@ -84,15 +84,19 @@ public class DBWraper {
 				  item.setTime(cursor.getLong(time));
 				  item.setPath(cursor.getString(path));
 				  item.setExtra(cursor.getString(extra));
-				  item.setFirstMark(cursor.getLong(first));
-				  item.setSecondMark(cursor.getLong(second));
-				  item.setThirdMark(cursor.getLong(third));
-				  item.setFourthMark(cursor.getLong(fourth));
+				  item.setMark(0, cursor.getLong(first));
+				  item.setMark(1, cursor.getLong(second));
+				  item.setMark(2, cursor.getLong(third));
+				  item.setMark(3, cursor.getLong(fourth));
 				  list.add(item);
 			  }while(cursor.moveToNext());
 			  cursor.close();
 		  }
 		  return list;
+	  }
+	  public void deleteRecord(RecordItem item){
+		  
+		  db.delete(RECORD_TABLE, "_id=?", new String[]{ Long.toString(item.getId())});
 	  }
 	  public void close(){
 		  openHelper.close();

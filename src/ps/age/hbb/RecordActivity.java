@@ -10,7 +10,7 @@ import java.util.TimeZone;
 import ps.age.hbb.core.MediaErrorBroadcastReceiver;
 import ps.age.hbb.core.MediaRecordEventListener;
 import ps.age.hbb.core.RecordItem;
-import ps.age.util.DBWraper;
+import ps.age.hbb.core.DBWraper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
