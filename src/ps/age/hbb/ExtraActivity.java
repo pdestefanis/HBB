@@ -58,7 +58,6 @@ public class ExtraActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.extra);
-        try{
         Log.e(tag, "onCreate");    	
 
         mSave 			 = (Button) findViewById(R.id.button_save);
@@ -74,6 +73,9 @@ public class ExtraActivity extends Activity {
                R.array.primary_array , android.R.layout.simple_spinner_item);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mPrimary.setAdapter(mAdapter);
+        // make sure that the spinner and editText box are disabled
+		mPrimary.setEnabled(false);
+		mOther.setEnabled(false);
         mPrimary.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 			@Override
@@ -99,13 +101,8 @@ public class ExtraActivity extends Activity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				if(isChecked){
-    				mPrimary.setEnabled(false);
-    				mOther.setEnabled(false);
-				}else{
-    				mPrimary.setEnabled(true);
-    				mOther.setEnabled(true);
-				}
+    				mPrimary.setEnabled(!isChecked);
+    				mOther.setEnabled(!isChecked);			
 			}
         	
         });
@@ -131,9 +128,6 @@ public class ExtraActivity extends Activity {
                 }
             }
         });
-        }catch(Exception e){
-        	Log.e(tag, e.toString());
-        }
     }
     private OnClickListener listener = new OnClickListener(){
 
@@ -189,57 +183,15 @@ public class ExtraActivity extends Activity {
     			else{  				
         			if(value.equals(getResources().getString(R.string.dead))){
         				mAlive.setChecked(false);
+        				mPrimary.setEnabled(true);
+        				mOther.setEnabled(true);
         			}	
         		}
     			continue;
     		}   		
 
     	}
-    
-/*    	for(int i=0;i<mForm.length();i++){
-    		JSONObject obj = mForm.get(i);
-    		String value = obj.getString(VALUE);
-    		int id  = obj.getInt(ID);
-    		
-    		if (value == null)
-    			continue;
-    		
-    		switch(id){
-    		case ID_IDENT: 
-    			mID.setText(value);
-    			break;
-    		case ID_CRY:
-    			((RadioButton)cryGroup.findViewWithTag(value)).setChecked(true);
-    			break;
-    		case ID_VENTILATION:
-    			((RadioButton)ventilationGroup.findViewWithTag(value)).setChecked(true);
-    			break;  			
-    		case ID_OTHER:
-				mOther.setText(value);
-				break;
-    		case ID_PROBLEM:
-    			mProblem.setText(value);
-    			break;
-    		case ID_PRIMARY:
-    			mPrimary.setSelection(mAdapter.getPosition(value), false);
-    			break;
-    		case ID_ALIVE:
-    			
-    			if(value.equals(getResources().getString(R.string.alive))){
-    				mAlive.setChecked(true);
-    				mPrimary.setEnabled(false);
-    				mOther.setEnabled(false);
-    			}
-    			else{
-        			if(value.equals(getResources().getString(R.string.dead))){
-        				mAlive.setChecked(false);
-        				
-        			}
-    			}
-    		}
-    		
-    	}
-*/
+   
    }
     @Override
     protected void onResume(){

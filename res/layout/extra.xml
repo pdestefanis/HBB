@@ -171,14 +171,14 @@
                     android:layout_weight="1"
                     android:text="@string/alive_lable"
                     android:textColor="@android:color/black" />
-
+
                 <ToggleButton
                     android:id="@+id/alive_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOn="@string/alive"
-                    android:textOff="@string/dead"                    
-                     />
+                    android:checked="true"
+                    android:textOff="@string/dead"
+                    android:textOn="@string/alive" />
 
             </LinearLayout>
 
@@ -192,6 +192,7 @@
             <Spinner
                 android:id="@+id/primary_spinner"
                 android:layout_width="fill_parent"
+                android:enabled="false"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -206,6 +207,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:enabled="false"
                 android:maxLines="3"
                 android:textColor="@android:color/black" />
 

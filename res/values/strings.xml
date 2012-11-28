@@ -58,6 +58,7 @@
     <string name="other_lable">If &#8220;Malformation&#8221; or &#8220;Other&#8221;, please specify:</string>
     <string name="problem_lable">Problems when using the system:</string>
     <string-array name="primary_array">
+        <item>N/A</item>
         <item>Fresh stillbirth</item>
         <item>Macerated stillbirth</item>
         <item>Birth Asphyxia</item>
