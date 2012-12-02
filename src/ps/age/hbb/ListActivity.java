@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -200,34 +201,7 @@ public class ListActivity extends Activity {
     	if(mList.size() == 0)
     		finish();
     }
-    private class LoadListTask extends AsyncTask<Void, Void, ArrayList<RecordItem>> {
-        @Override
-        protected ArrayList<RecordItem> doInBackground(Void ... args) {
-        	DBWraper wraper = new DBWraper(ListActivity.this);
-	        ArrayList<RecordItem> list = wraper.getRecordsList();
-	        wraper.close();
-        	
-          return list;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<RecordItem> result) {
-        	mProgressDialog.dismiss();
-        	mList = result;
-        	if(result != null && (!isFinishing())){
-        		mAdapter =new MenuAdapter(ListActivity.this, R.layout.list_item,result ); 
-        		
-        		listView.setAdapter(mAdapter);
-        		
-        	}
-        	else{
-        		Toast.makeText(ListActivity.this, R.string.error_noData, Toast.LENGTH_LONG).show();
-        		finish();
-        	}
-        }
-      }
-    
-    
+       
 	private class MenuAdapter extends ArrayAdapter<RecordItem>{
 
 	    Context context; 
@@ -315,6 +289,7 @@ public class ListActivity extends Activity {
 		}
 		@Override
 		public void onPostExecute(Boolean success){
+			Log.e(TAG, "onPostExcute "+String.valueOf(success));
 			mProgressDialog.dismiss();
 			if(success){
 				
@@ -328,4 +303,34 @@ public class ListActivity extends Activity {
 			}
 		}
 	}
+	 private class LoadListTask extends AsyncTask<Void, Void, ArrayList<RecordItem>> {
+	        @Override
+	        protected ArrayList<RecordItem> doInBackground(Void ... args) {
+	        	DBWraper wraper = new DBWraper(ListActivity.this);
+		        ArrayList<RecordItem> list = wraper.getRecordsList();
+		        wraper.close();
+	        	
+	          return list;
+	        }
+
+	        @Override
+	        protected void onPostExecute(ArrayList<RecordItem> result) {
+	        	mProgressDialog.dismiss();
+	        	mList = result;
+	        	if(result != null && (!isFinishing())){
+	        		mAdapter =new MenuAdapter(ListActivity.this, R.layout.list_item,result ); 
+	        		for(RecordItem item : mList){
+	        			Log.e(TAG, String.valueOf(item.getId())+":"+String.valueOf(item.getUploadTime()));
+	        		}
+	        		listView.setAdapter(mAdapter);
+	        		
+	        	}
+	        	else{
+	        		Toast.makeText(ListActivity.this, R.string.error_noData, Toast.LENGTH_LONG).show();
+	        		finish();
+	        	}
+	        }
+	      }
+	    
+
 }

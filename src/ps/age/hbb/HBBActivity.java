@@ -258,7 +258,7 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener, On
         	firstText.setText(fmt.format(date));
         }
         if(mItem.getMark(1) != -1){
-        	date.setTime(mItem.getMark(0));
+        	date.setTime(mItem.getMark(1));
         	secondText.setText(fmt.format(date));
         }
         if(mItem.getMark(2) != -1){

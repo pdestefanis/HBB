@@ -20,15 +20,15 @@
             android:scaleType="centerInside"
             android:contentDescription="@string/home"
             android:src="@drawable/ic_home" />
-        
+        
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             android:text="@string/main_list"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 

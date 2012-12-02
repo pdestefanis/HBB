@@ -133,6 +133,8 @@ public class ExtraActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
+			Log.e(tag, "onClick");
+
 			if(mItem != null){
 				saveForm();
 				Intent intent = getIntent();
@@ -144,6 +146,7 @@ public class ExtraActivity extends Activity {
     	
     };
     private void loadForm() {
+    	Log.e(tag, "loadForm");
 		String[] keys = mItem.getExtraKeys();
 		if(keys == null)
 			return;
@@ -219,7 +222,8 @@ public class ExtraActivity extends Activity {
     }
 
     private void saveForm(){
-    	
+		Log.e(tag, "saveForm");
+
         if(mID.getText().toString().length() != 0 ){
         	mItem.putExtraString(RecordItem.EXTRA_ID,	mID.getText().toString());
         }

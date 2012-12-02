@@ -147,7 +147,7 @@ public class RecordActivity extends Activity implements
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.e(tag, "onStop");
+		Log.e(tag, "onStop, isFinishing: "+String.valueOf(isFinishing()));
 		if (isFinishing()) {
 
 			if (isRecording) {
@@ -156,10 +156,15 @@ public class RecordActivity extends Activity implements
 			}
 
 			mHandler.removeCallbacks(timeRunnable);
-			unregisterReceiver(mReceiver);
 		}
 	}
-
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		Log.e(tag, "onDestroy");
+		unregisterReceiver(mReceiver);
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.e(tag, "onActivity Result");
@@ -170,7 +175,7 @@ public class RecordActivity extends Activity implements
 		finish();
 		
 	}
-
+	
 	private void saveItem() {
 
 		DBWraper wraper = new DBWraper(RecordActivity.this);
