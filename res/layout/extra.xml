@@ -21,8 +21,14 @@
             android:contentDescription="@string/home"
             android:scaleType="centerInside"
             android:src="@drawable/ic_home" />
+<<<<<<< HEAD
 
         <TextView
+=======
+        
+        
+	<TextView
+>>>>>>> origin/master
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,15 +38,26 @@
             android:layout_marginTop="20dp"
             android:text="@string/extra"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+<<<<<<< HEAD
     </RelativeLayout>
 
+=======
+	
+	</RelativeLayout>
+	
+>>>>>>> origin/master
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
+<<<<<<< HEAD
 
         <LinearLayout
+=======
+	
+	<LinearLayout
+>>>>>>> origin/master
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -154,14 +171,24 @@
                     android:text="@string/ventilation3"
                     android:textColor="@android:color/black" />
             </RadioGroup>
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> origin/master
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp" >
+<<<<<<< HEAD
 
                 <TextView
+=======
+                
+                
+            <TextView
+>>>>>>> origin/master
                     android:id="@+id/TextView02"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -169,8 +196,14 @@
                     android:layout_weight="1"
                     android:text="@string/alive_lable"
                     android:textColor="@android:color/black" />
+<<<<<<< HEAD
 
                 <ToggleButton
+=======
+            
+            
+            <ToggleButton
+>>>>>>> origin/master
                     android:id="@+id/alive_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -213,7 +246,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/problem_lable"
                 android:textColor="@android:color/black" />
+<<<<<<< HEAD
 
+=======
+            
+            
+>>>>>>> origin/master
             <EditText
                 android:id="@+id/problem_editText"
                 android:layout_width="fill_parent"
@@ -224,7 +262,12 @@
                 android:textColor="@android:color/black" />
         </LinearLayout>
     </ScrollView>
+<<<<<<< HEAD
 
+=======
+    
+    
+>>>>>>> origin/master
     <Button
         android:id="@+id/button_save"
         android:layout_width="wrap_content"
