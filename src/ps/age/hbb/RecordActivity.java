@@ -68,20 +68,20 @@ public class RecordActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record);
 
-		mRecord 		= (Button) findViewById(R.id.recordButton);
-		mBack   		= (ImageView) findViewById(R.id.back);
-		systemTime 		= (TextView) findViewById(R.id.systemTime_Value);
-		elapsedTime 	= (TextView) findViewById(R.id.elapsedTime_Value);
-		remainingTime 	= (TextView) findViewById(R.id.remainingTime_Value);
+		mRecord = (Button) findViewById(R.id.recordButton);
+		mBack = (ImageView) findViewById(R.id.back);
+		systemTime = (TextView) findViewById(R.id.systemTime_Value);
+		elapsedTime = (TextView) findViewById(R.id.elapsedTime_Value);
+		remainingTime = (TextView) findViewById(R.id.remainingTime_Value);
 
 		mRecord.setOnClickListener(listener);
-		mBack.setOnClickListener(new OnClickListener(){
+		mBack.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				finish();
 			}
-			
+
 		});
 		mHandler = new Handler() {
 
@@ -106,8 +106,7 @@ public class RecordActivity extends Activity implements
 								getResources().getString(
 										R.string.noteDialog_negative));
 						dialog.show();
-					}
-					else{
+					} else {
 						mRecord.setClickable(true);
 					}
 					break;
@@ -126,7 +125,7 @@ public class RecordActivity extends Activity implements
 				}
 			}
 		};
-		
+
 		mHandler.post(timeRunnable);
 
 		timerFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -147,7 +146,7 @@ public class RecordActivity extends Activity implements
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.e(tag, "onStop, isFinishing: "+String.valueOf(isFinishing()));
+		Log.e(tag, "onStop, isFinishing: " + String.valueOf(isFinishing()));
 		if (isFinishing()) {
 
 			if (isRecording) {
@@ -158,13 +157,14 @@ public class RecordActivity extends Activity implements
 			mHandler.removeCallbacks(timeRunnable);
 		}
 	}
+
 	@Override
-	public void onDestroy(){
+	public void onDestroy() {
 		super.onDestroy();
 		Log.e(tag, "onDestroy");
 		unregisterReceiver(mReceiver);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.e(tag, "onActivity Result");
@@ -173,9 +173,9 @@ public class RecordActivity extends Activity implements
 			saveItem();
 		}
 		finish();
-		
+
 	}
-	
+
 	private void saveItem() {
 
 		DBWraper wraper = new DBWraper(RecordActivity.this);
@@ -219,9 +219,9 @@ public class RecordActivity extends Activity implements
 		/*
 		 * Add delay to ensure that the recoding already started
 		 */
-		mHandler.postDelayed(new Runnable(){
+		mHandler.postDelayed(new Runnable() {
 			@Override
-			public void run(){
+			public void run() {
 				mRecord.setClickable(true);
 			}
 		}, 500);

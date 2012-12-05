@@ -9,59 +9,55 @@ import android.telephony.TelephonyManager;
 public class MediaErrorBroadcastReceiver extends BroadcastReceiver {
 	public static final String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
 	MediaRecordEventListener mListener;
-	
+
 	@Override
 	public void onReceive(Context arg0, Intent intent) {
-		if(mListener == null)
+		if (mListener == null)
 			return;
-		
-		if(intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)){
+
+		if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
 			mListener.onReady();
 		}
-		if(intent.getAction().equals(Intent.ACTION_MEDIA_BAD_REMOVAL)){
+		if (intent.getAction().equals(Intent.ACTION_MEDIA_BAD_REMOVAL)) {
 			mListener.onError();
 		}
-		if(intent.getAction().equals(Intent.ACTION_MEDIA_EJECT)){
+		if (intent.getAction().equals(Intent.ACTION_MEDIA_EJECT)) {
 			mListener.onError();
 		}
-		if(intent.getAction().equals(Intent.ACTION_MEDIA_REMOVED)){
+		if (intent.getAction().equals(Intent.ACTION_MEDIA_REMOVED)) {
 			mListener.onError();
 		}
-		if(intent.getAction().equals(Intent.ACTION_MEDIA_SHARED)){
+		if (intent.getAction().equals(Intent.ACTION_MEDIA_SHARED)) {
 			mListener.onError();
 		}
-		if(intent.getAction().equals(ACTION_PHONE_STATE_CHANGED)){
+		if (intent.getAction().equals(ACTION_PHONE_STATE_CHANGED)) {
 			Bundle extras = intent.getExtras();
 			if (extras != null) {
-			  String state = extras.getString(TelephonyManager.EXTRA_STATE);
-			  if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-				  mListener.onError();
-			  }
-			  if(state.equals(TelephonyManager.EXTRA_STATE_IDLE)){
+				String state = extras.getString(TelephonyManager.EXTRA_STATE);
+				if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+					mListener.onError();
+				}
+				if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
 					mListener.onReady();
-			  }
-			  if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
+				}
+				if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
 					mListener.onReady();
-			  }
+				}
 			}
 		}
-		
+
 	}
-	public void setMediaRecordEventListener(MediaRecordEventListener listener){
+
+	public void setMediaRecordEventListener(MediaRecordEventListener listener) {
 		mListener = listener;
 	}
 
 }
 
 /*
-Bundle extras = intent.getExtras();
-if (extras != null) {
-  String state = extras.getString(TelephonyManager.EXTRA_STATE);
-  Log.w("DEBUG", state);
-  if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-    String phoneNumber = extras
-        .getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-    Log.w("DEBUG", phoneNumber);
-  }
-}
-*/
+ * Bundle extras = intent.getExtras(); if (extras != null) { String state =
+ * extras.getString(TelephonyManager.EXTRA_STATE); Log.w("DEBUG", state); if
+ * (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) { String phoneNumber =
+ * extras .getString(TelephonyManager.EXTRA_INCOMING_NUMBER); Log.w("DEBUG",
+ * phoneNumber); } }
+ */

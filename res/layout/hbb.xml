@@ -86,127 +86,121 @@
             android:text="@string/initial"
             android:textColor="@android:color/black" />
     </RelativeLayout>
-
+
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp" >
-
-        <ImageView
-            android:id="@+id/mark1"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="10dp"
-            android:src="@drawable/mark1" />
-
-        <TextView
-            android:id="@+id/mark1_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:text="@string/initial"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp" >
-
-        <ImageView
-            android:id="@+id/mark2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="10dp"
-            android:src="@drawable/mark2" />
-
-        <TextView
-            android:id="@+id/mark2_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:text="@string/initial"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp" >
-
-        <ImageView
-            android:id="@+id/mark3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="10dp"
-            android:src="@drawable/mark3" />
-
-        <TextView
-            android:id="@+id/mark3_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:text="@string/initial"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp" >
-
-        <ImageView
-            android:id="@+id/mark4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="10dp"
-            android:src="@drawable/mark4" />
-
-        <TextView
-            android:id="@+id/mark4_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:text="@string/initial"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <TextView
-            android:id="@+id/form_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_height="0dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/border"
-            android:text="@string/review_form"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/mark1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/mark1" />
+
+            <TextView
+                android:id="@+id/mark1_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="@string/initial"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/mark2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/mark2" />
+
+            <TextView
+                android:id="@+id/mark2_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="@string/initial"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/mark3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/mark3" />
+
+            <TextView
+                android:id="@+id/mark3_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="@string/initial"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/mark4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/mark4" />
+
+            <TextView
+                android:id="@+id/mark4_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="@string/initial"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/form_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/border"
+        android:text="@string/review_form"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
 
 </LinearLayout>

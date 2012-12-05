@@ -2,7 +2,6 @@ package ps.age.hbb.core;
 
 import java.util.ArrayList;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -48,13 +47,13 @@ public class DBWraper {
 		values.put(RECORD_MARK_THIRD, item.getMark(2));
 		values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());
-		
+
 		// inserted successfully
-		if (db.insert(RECORD_TABLE, null, values) != -1){
+		if (db.insert(RECORD_TABLE, null, values) != -1) {
 			success = true;
 		}
-		Log.e(tag, "insertRecord: success ? "+String.valueOf(success));
-		Log.e(tag, "record: "+values.toString());
+		Log.e(tag, "insertRecord: success ? " + String.valueOf(success));
+		Log.e(tag, "record: " + values.toString());
 		return success;
 	}
 
@@ -150,15 +149,16 @@ public class DBWraper {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.e(tag, "onUpdate");
 
-            // Upgrade from version 1 to 2.
-            try {
- 
-                    db.execSQL("ALTER TABLE " + RECORD_TABLE + " ADD COLUMN "
-                                    + RECORD_TIME_UPLOAD + " INTEGER NULL;");
-            } catch (SQLException e) {
-                    Log.e(tag, "Error executing SQL: ", e);
-                    // If the error is "duplicate column name" then everything is fine
-            }
+			// Upgrade from version 1 to 2.
+			try {
+
+				db.execSQL("ALTER TABLE " + RECORD_TABLE + " ADD COLUMN "
+						+ RECORD_TIME_UPLOAD + " INTEGER NULL;");
+			} catch (SQLException e) {
+				Log.e(tag, "Error executing SQL: ", e);
+				// If the error is "duplicate column name" then everything is
+				// fine
+			}
 		}
 	}
 

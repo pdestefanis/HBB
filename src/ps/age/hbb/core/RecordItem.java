@@ -64,9 +64,9 @@ public class RecordItem implements Serializable {
 	}
 
 	public void setMark(int position, long value) {
-		//fix for old HBB db where value is init to -1
+		// fix for old HBB db where value is init to -1
 		marksArray[position] = value > 0 ? value : 0;
-		
+
 	}
 
 	public int getLength() {
@@ -201,10 +201,10 @@ public class RecordItem implements Serializable {
 		if (extra != null) {
 			try {
 				extra.has(key);
-					return extra.getString(key);
+				return extra.getString(key);
 
 			} catch (JSONException e) {
-				Log.i(tag,e.toString());
+				Log.i(tag, e.toString());
 			}
 		}
 		return null;

@@ -16,34 +16,38 @@ public class HBBDialog extends Dialog {
 	Button mPositive;
 	Button mNegative;
 	Message mMsg;
+
 	public HBBDialog(Context context) {
 		super(context);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.hpp_dialog);
-		mTitle    = (TextView) findViewById(R.id.dialog_title);
-		mExtra    = (TextView) findViewById(R.id.dialog_extra);
+		mTitle = (TextView) findViewById(R.id.dialog_title);
+		mExtra = (TextView) findViewById(R.id.dialog_extra);
 		mPositive = (Button) findViewById(R.id.button_positive);
 		mNegative = (Button) findViewById(R.id.button_negative);
-		
+
 		mPositive.setOnClickListener(listener);
 		mNegative.setOnClickListener(listener);
 	}
-	
-	public void setTitle(String text){
+
+	public void setTitle(String text) {
 		mTitle.setText(text);
 	}
-	public void setExtra(String text){
+
+	public void setExtra(String text) {
 		mExtra.setText(text);
 	}
-	public void setButtonsText(String positive,String negative){
+
+	public void setButtonsText(String positive, String negative) {
 		mPositive.setText(positive);
 		mNegative.setText(negative);
 	}
-	private View.OnClickListener listener = new View.OnClickListener(){
+
+	private View.OnClickListener listener = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			switch(v.getId()){
+			switch (v.getId()) {
 			case R.id.button_positive:
 				mMsg.arg1 = Activity.RESULT_OK;
 				break;
@@ -55,10 +59,10 @@ public class HBBDialog extends Dialog {
 			dismiss();
 		}
 
-		
 	};
+
 	@Override
-	public void setDismissMessage(Message msg){
+	public void setDismissMessage(Message msg) {
 		super.setDismissMessage(msg);
 		mMsg = msg;
 	}
