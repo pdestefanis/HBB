@@ -230,6 +230,7 @@ public class ListActivity extends Activity {
 	           TextView title = (TextView) view.findViewById(R.id.item_title);
 	           title.setText(fmt.format(date));
 	           TextView marks = (TextView) view.findViewById(R.id.item_marks);
+	           
 	           String extra_id = item.getExtraString(RecordItem.EXTRA_ID);
 	           if(extra_id != null){
 	        	   TextView extra_ident = (TextView) view.findViewById(R.id.item_id);

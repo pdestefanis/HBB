@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/extra_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:id="@+id/extra_root" >
-  <RelativeLayout
+    android:orientation="vertical" >
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/list_header_background" >
@@ -17,10 +18,10 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:scaleType="centerInside"
             android:contentDescription="@string/home"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_home" />
-        
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
@@ -31,15 +32,14 @@
             android:layout_marginTop="20dp"
             android:text="@string/extra"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
     </RelativeLayout>
-    
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
-
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -132,8 +132,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/ventilation1"
                     android:tag="@string/ventilation1"
+                    android:text="@string/ventilation1"
                     android:textColor="@android:color/black" />
 
                 <RadioButton
@@ -141,8 +141,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:tag="@string/ventilation2"
                     android:text="@string/ventilation2"
-                    android:tag="@string/ventilation2"                    
                     android:textColor="@android:color/black" />
 
                 <RadioButton
@@ -150,18 +150,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/ventilation3"
-                    android:textColor="@android:color/black"
                     android:tag="@string/ventilation3"
-                     />
+                    android:text="@string/ventilation3"
+                    android:textColor="@android:color/black" />
             </RadioGroup>
-
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp" >
-
+
                 <TextView
                     android:id="@+id/TextView02"
                     android:layout_width="0dp"
@@ -170,7 +169,7 @@
                     android:layout_weight="1"
                     android:text="@string/alive_lable"
                     android:textColor="@android:color/black" />
-
+
                 <ToggleButton
                     android:id="@+id/alive_toggle"
                     android:layout_width="wrap_content"
@@ -178,7 +177,6 @@
                     android:checked="true"
                     android:textOff="@string/dead"
                     android:textOn="@string/alive" />
-
             </LinearLayout>
 
             <TextView
@@ -191,8 +189,8 @@
             <Spinner
                 android:id="@+id/primary_spinner"
                 android:layout_width="fill_parent"
-                android:enabled="false"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -215,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/problem_lable"
                 android:textColor="@android:color/black" />
-
+
             <EditText
                 android:id="@+id/problem_editText"
                 android:layout_width="fill_parent"
@@ -224,10 +222,9 @@
                 android:ems="10"
                 android:maxLines="3"
                 android:textColor="@android:color/black" />
-
         </LinearLayout>
     </ScrollView>
-
+
     <Button
         android:id="@+id/button_save"
         android:layout_width="wrap_content"

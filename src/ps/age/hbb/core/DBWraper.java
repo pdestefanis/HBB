@@ -2,9 +2,11 @@ package ps.age.hbb.core;
 
 import java.util.ArrayList;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -12,7 +14,7 @@ import android.util.Log;
 public class DBWraper {
 	public static final String tag = DBWraper.class.getSimpleName();
 	private static final String DATABASE_NAME = "database.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private Context context;
 	private SQLiteDatabase db;
 	private OpenHelper openHelper;
@@ -133,6 +135,7 @@ public class DBWraper {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.e(tag, "onCreate");
 			db.execSQL("CREATE TABLE " + RECORD_TABLE + "(" + RECORD_ID
 					+ " INTEGER PRIMARY KEY autoincrement, " + RECORD_PATH
 					+ " TEXT NOT NULL, " + RECORD_EXTRA + " TEXT NULL, "
@@ -145,8 +148,18 @@ public class DBWraper {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("DROP TABLE IF EXISTS " + RECORD_TABLE);
-			onCreate(db);
+			Log.e(tag, "onUpdate");
+
+            // Upgrade from version 1 to 2.
+            try {
+ 
+                    db.execSQL("ALTER TABLE " + RECORD_TABLE + " ADD COLUMN "
+                                    + RECORD_TIME_UPLOAD + " INTEGER NULL;");
+            } catch (SQLException e) {
+                    Log.e(tag, "Error executing SQL: ", e);
+                    // If the error is "duplicate column name" then everything is fine
+            }
 		}
 	}
+
 }

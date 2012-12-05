@@ -3,7 +3,6 @@
     package="ps.age.hbb"
     android:versionCode="6"
     android:versionName="1.5" >
-
     <uses-sdk android:minSdkVersion="7" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
