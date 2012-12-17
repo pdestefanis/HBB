@@ -109,15 +109,17 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener,
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.e(tag, "onPause");
+		Log.e(tag, "onPause, is finishing? "+String.valueOf(isFinishing()));
 
 		isPlaying = false;
 		if (isFinishing()) {
 			if (mPlayer != null) {
 
 				if (mPlayer.isPlaying()) {
+					Log.w(tag, "mPlayer is still playing , trying to stop it");
 					mPlayer.stop();
 				}
+				Log.w(tag, "mPlayer release");				
 				mPlayer.release();
 				mPlayer = null;
 
@@ -126,8 +128,14 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener,
 			new Thread() {
 				@Override
 				public void run() {
-					mWraper.updateRecord(mItem);
-					mWraper.close();
+					try{
+						Log.w(tag, "Background thread");
+						mWraper.updateRecord(mItem);
+						mWraper.close();
+					}catch(Exception e){
+						Log.e(tag, "this should never happen "+e.toString());
+						e.printStackTrace();
+					}
 				}
 			}.start();
 		} else {
@@ -153,10 +161,9 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.e(tag, "onActivityResult");
-		if (data != null)
-			Log.e(tag, "intent " + data.toString());
 		if ((requestCode == ExtraActivity.REQUEST_CODE) && (data != null)) {
 			mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
+			Log.e(tag, "mItem extra " + mItem.getExtra());
 		}
 
 	}
@@ -404,12 +411,12 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener,
 		seekBar.setProgress(0);
 		mPlay.setImageResource(android.R.drawable.ic_media_play);
 		currentTime.setText("");
-
+		
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer arg0) {
-
+		Log.e(tag, "mediaplayer ready");
 		isReady = true;
 		seekBar.setEnabled(true);
 		seekBar.setMax(mPlayer.getDuration());

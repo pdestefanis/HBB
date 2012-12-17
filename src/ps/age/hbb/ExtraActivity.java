@@ -109,6 +109,7 @@ public class ExtraActivity extends Activity {
 		mItem = (RecordItem) getIntent().getSerializableExtra(ITEM);
 		mSave.setOnClickListener(listener);
 		if (mItem.getExtra() != null) {
+			Log.e(tag, "Item has extra: "+mItem.getExtra());
 			loadForm();
 		}
 		final View activityRootView = findViewById(R.id.extra_root);
@@ -141,7 +142,9 @@ public class ExtraActivity extends Activity {
 			Log.e(tag, "onClick");
 
 			if (mItem != null) {
+				Log.i(tag, "appending extra to item");
 				saveForm();
+				Log.i(tag, "extra: "+mItem.getExtra());				
 				Intent intent = getIntent();
 				intent.putExtra(ITEM, mItem);
 				setResult(RESULT_OK, intent);
@@ -272,7 +275,7 @@ public class ExtraActivity extends Activity {
 			mItem.putExtraString(RecordItem.EXTRA_PROBLEM, mProblem.getText()
 					.toString().trim());
 		}
-
+		
 	}
 
 }

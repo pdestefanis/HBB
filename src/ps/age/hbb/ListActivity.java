@@ -67,6 +67,7 @@ public class ListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
 		WebClient.setURL(getResources().getString(R.string.url));
+		Log.e(TAG, "onCreate");
 		mHandler = new Handler() {
 
 			@Override
@@ -94,8 +95,13 @@ public class ListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view,
 					int position, long id) {
+				Log.e(TAG, "selected item: "+String.valueOf(position));
+				RecordItem item = mList.get(position);
+				if(item.getExtra() !=null)
+					Log.e(TAG, "item: extra"+item.getExtra());
+
 				Intent intent = new Intent(ListActivity.this, HBBActivity.class);
-				intent.putExtra(ExtraActivity.ITEM, mList.get(position));
+				intent.putExtra(ExtraActivity.ITEM, item );
 				startActivity(intent);
 				finish();
 			}
@@ -110,11 +116,12 @@ public class ListActivity extends Activity {
 				 * Checks if the item has been uploaded to the server and
 				 * creates a menu if so by propagating the long click event
 				 */
+				Log.e(TAG, "Long click "+String.valueOf(position)+
+							"time "+String.valueOf(mList.get(position).getUploadTime()));	
+				if (mList.get(position).getUploadTime() > 0)
+					return false;
 
-				if (mList.get(position).getUploadTime() == -1)
-					return true;
-
-				return false;
+				return true;
 			}
 
 		});
@@ -133,7 +140,7 @@ public class ListActivity extends Activity {
 					rand.nextLong());
 			pref.edit().putString(USER_NAME, userName).commit();
 		}
-
+		Log.e(TAG, "userName: "+userName);
 	}
 
 	@Override
@@ -142,6 +149,7 @@ public class ListActivity extends Activity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list_menu, menu);
+		Log.e(TAG, "creating context Menu");
 	}
 
 	@Override
@@ -191,6 +199,7 @@ public class ListActivity extends Activity {
 	 * Create a delete dialog related to RecordItem at position in mList
 	 */
 	public void createDeleteDialog(int position) {
+		Log.e(TAG, "create Delete dialog");
 		HBBDialog dialog = new HBBDialog(ListActivity.this);
 		dialog.setCancelable(false);
 		Message msg = mHandler.obtainMessage();
@@ -209,6 +218,7 @@ public class ListActivity extends Activity {
 	 * Delete a record at a specified position in the record list
 	 */
 	private void deleteRecord(int position) {
+		Log.e(TAG, "deleting record "+String.valueOf(position));
 		DBWraper wraper = new DBWraper(this);
 		RecordItem item = mList.get(position);
 		mList.remove(position);
@@ -264,7 +274,7 @@ public class ListActivity extends Activity {
 				view.setBackgroundResource(R.drawable.background_uploaded);
 				if (totalMarks != 0) {
 					marks.setTextColor(Color.BLACK);
-					marks.setText(String.valueOf(totalMarks) + marks.getText());
+					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
 				} else
 					marks.setText("error");
 			} else {
@@ -274,11 +284,13 @@ public class ListActivity extends Activity {
 					marks.setText("");
 				} else {
 					view.setBackgroundResource(R.drawable.background_marks);
-					marks.setText(String.valueOf(totalMarks) + marks.getText());
+					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
 				}
-
+				
 			}
-
+			Log.e(TAG, "adding item");
+			Log.e(TAG, title.getText()+":"+marks.getText()+":"+extra_id);
+		
 			return row;
 		}
 
