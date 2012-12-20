@@ -67,7 +67,7 @@ public class RecordActivity extends Activity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record);
-
+		Log.e(tag, "onCreate");
 		mRecord = (Button) findViewById(R.id.recordButton);
 		mBack = (ImageView) findViewById(R.id.back);
 		systemTime = (TextView) findViewById(R.id.systemTime_Value);
@@ -79,6 +79,7 @@ public class RecordActivity extends Activity implements
 
 			@Override
 			public void onClick(View v) {
+				Log.i(tag, "back key pressed");
 				finish();
 			}
 
@@ -153,7 +154,7 @@ public class RecordActivity extends Activity implements
 				stopRecording();
 				new File(tmpPath).delete();
 			}
-
+			
 			mHandler.removeCallbacks(timeRunnable);
 		}
 	}
@@ -177,14 +178,16 @@ public class RecordActivity extends Activity implements
 	}
 
 	private void saveItem() {
-
+		Log.e(tag, "saving recoed Item");
+		if(mItem.getExtra() != null)
+			Log.e(tag, "extra: "+mItem.getExtra());
 		DBWraper wraper = new DBWraper(RecordActivity.this);
 		wraper.insertRecord(mItem);
 		wraper.close();
 	}
 
 	private void startRecording() {
-
+		Log.e(tag, "startRecording");
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mRecorder.setOutputFormat(MediaRecorder.VideoEncoder.DEFAULT);
@@ -228,6 +231,7 @@ public class RecordActivity extends Activity implements
 	}
 
 	private void stopRecording() {
+		Log.e(tag, "stop Recording");
 		if (mRecorder != null) {
 			mRecorder.stop();
 			mItem.setLength((int) totalTime);
@@ -241,6 +245,7 @@ public class RecordActivity extends Activity implements
 		@Override
 		public void onClick(View v) {
 			mRecord.setClickable(false);
+			String txt = null;
 			if (isRecording) {
 				HBBDialog dialog = new HBBDialog(RecordActivity.this);
 				dialog.setCancelable(false);
@@ -255,9 +260,14 @@ public class RecordActivity extends Activity implements
 						getResources().getString(R.string.saveDialog_positive),
 						getResources().getString(R.string.saveDialog_negative));
 				dialog.show();
+				txt = "displaying options";
 			} else {
 				startRecording();
+				txt = "start recording";
+
 			}
+			Log.e(tag, "button click "+txt );
+
 		}
 
 	};

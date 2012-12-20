@@ -40,7 +40,8 @@
           android:text="@string/totalMarks"
           android:layout_centerVertical="true"          
           android:textAppearance="?android:attr/textAppearanceSmall"
-          android:textColor="@android:color/white" />
+          android:textColor="@android:color/white"
+          android:tag="@string/totalMarks" />
 
   </RelativeLayout>
 
