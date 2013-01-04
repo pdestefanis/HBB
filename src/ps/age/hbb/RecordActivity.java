@@ -72,12 +72,11 @@ public class RecordActivity extends Activity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record);
-		Log.e(tag, "onCreate");
+		Log.w(tag, "onCreate");
 		
 		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 		registerReceiver(bluetoothReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
 		audioManager.startBluetoothSco();
-		
 		mRecord 	  = (Button)    findViewById(R.id.recordButton);
 		mBack		  = (ImageView) findViewById(R.id.back);
 		systemTime	  = (TextView)  findViewById(R.id.systemTime_Value);
@@ -157,7 +156,7 @@ public class RecordActivity extends Activity implements
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.e(tag, "onStop, isFinishing: " + String.valueOf(isFinishing()));
+		Log.w(tag, "onStop, isFinishing: " + String.valueOf(isFinishing()));
 		if (isFinishing()) {
 
 			if (isRecording) {
@@ -174,13 +173,13 @@ public class RecordActivity extends Activity implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.e(tag, "onDestroy");
+		Log.w(tag, "onDestroy");
 		unregisterReceiver(mReceiver);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.e(tag, "onActivity Result");
+		Log.w(tag, "onActivity Result");
 		if ((requestCode == ExtraActivity.REQUEST_CODE) && (data != null)) {
 			mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
 			saveItem();
@@ -190,20 +189,20 @@ public class RecordActivity extends Activity implements
 	}
 
 	private void saveItem() {
-		Log.e(tag, "saving recoed Item");
+		Log.w(tag, "saving recoed Item");
 		if(mItem.getExtra() != null)
-			Log.e(tag, "extra: "+mItem.getExtra());
+			Log.w(tag, "extra: "+mItem.getExtra());
 		DBWraper wraper = new DBWraper(RecordActivity.this);
 		wraper.insertRecord(mItem);
 		wraper.close();
 	}
 
 	private void startRecording() {
-		Log.e(tag, "startRecording");
+		Log.w(tag, "startRecording , use Bluetooth? "+useBluetooth);
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		mRecorder.setOutputFormat(MediaRecorder.VideoEncoder.DEFAULT);
-		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+		mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 		if(useBluetooth){
 			//	for bluetooth devices
 			mRecorder.setAudioChannels(1);
@@ -248,7 +247,7 @@ public class RecordActivity extends Activity implements
 	}
 
 	private void stopRecording() {
-		Log.e(tag, "stop Recording");
+		Log.w(tag, "stop Recording");
 		if (mRecorder != null) {
 			mRecorder.stop();
 			mItem.setLength((int) totalTime);
@@ -283,7 +282,7 @@ public class RecordActivity extends Activity implements
 				txt = "start recording";
 
 			}
-			Log.e(tag, "button click "+txt );
+			Log.w(tag, "button click "+txt );
 
 		}
 
@@ -364,4 +363,5 @@ public class RecordActivity extends Activity implements
 
         }
     };
+
 }
