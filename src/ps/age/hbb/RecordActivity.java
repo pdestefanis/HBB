@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import ps.age.hbb.core.BluetoothAudioManager;
 import ps.age.hbb.core.MediaErrorBroadcastReceiver;
 import ps.age.hbb.core.MediaRecordEventListener;
 import ps.age.hbb.core.RecordItem;
@@ -18,6 +19,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -36,25 +40,44 @@ import android.widget.Toast;
 @SuppressLint("HandlerLeak")
 public class RecordActivity extends Activity implements
 		MediaRecordEventListener {
+	
 	public static final String tag = RecordActivity.class.getSimpleName();
-
-	private AudioManager  audioManager;
+	
+	private BluetoothAudioManager bluetoothAudioManager;
+	private MediaErrorBroadcastReceiver mReceiver;
+	
 	private Handler       mHandler;
 	private MediaRecorder mRecorder;
-	private MediaErrorBroadcastReceiver mReceiver;
+	
 	private Button     mRecord;
 	private ImageView  mBack;
 	private TextView   systemTime;
 	private TextView   elapsedTime;
 	private TextView   remainingTime;
+	private TextView   audioSource;
+	
+	private Drawable   bluetoothDrawable;
+	private Drawable   micDrawable;
+	
 	private RecordItem mItem;
 	private DateFormat fmt = DateFormat.getDateTimeInstance();
 	private SimpleDateFormat timerFormat = new SimpleDateFormat("HH:mm:ss");
 
+	private String noteTitle;
+	private String noteExtra;
+	private String notePositive;
+	private String noteNegative;
+	private String saveTitle;
+	private String saveExtra;
+	private String savePositive;
+	private String saveNegative;
+	
+	private String sourceTextBluetooth;
+	private String sourceTextMic;
+	
 	private String tmpPath;
 	private long startTime;
 	private boolean isRecording;
-	private boolean useBluetooth;
 	private static final long updateSleep = 100;
 	private static final String OUT_PATH = Environment
 			.getExternalStorageDirectory().getAbsolutePath() + "/HBB/";
@@ -74,15 +97,15 @@ public class RecordActivity extends Activity implements
 		setContentView(R.layout.record);
 		Log.w(tag, "onCreate");
 		
-		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-		registerReceiver(bluetoothReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED));
-		audioManager.startBluetoothSco();
+		bluetoothAudioManager = new BluetoothAudioManager(this);
+		
 		mRecord 	  = (Button)    findViewById(R.id.recordButton);
 		mBack		  = (ImageView) findViewById(R.id.back);
 		systemTime	  = (TextView)  findViewById(R.id.systemTime_Value);
 		elapsedTime	  = (TextView)  findViewById(R.id.elapsedTime_Value);
 		remainingTime = (TextView)  findViewById(R.id.remainingTime_Value);
-
+		audioSource   = (TextView)  findViewById(R.id.textView_sourceIndecator);
+		
 		mRecord.setOnClickListener(listener);
 		mBack.setOnClickListener(new OnClickListener() {
 
@@ -93,6 +116,7 @@ public class RecordActivity extends Activity implements
 			}
 
 		});
+		
 		mHandler = new Handler() {
 
 			@Override
@@ -106,15 +130,9 @@ public class RecordActivity extends Activity implements
 						msg = obtainMessage();
 						msg.what = DIALOG_NOTE;
 						dialog.setDismissMessage(msg);
-						dialog.setTitle(getResources().getString(
-								R.string.noteDialog_title));
-						dialog.setExtra(getResources().getString(
-								R.string.noteDialog_extra));
-						dialog.setButtonsText(
-								getResources().getString(
-										R.string.noteDialog_positive),
-								getResources().getString(
-										R.string.noteDialog_negative));
+						dialog.setTitle(noteTitle);
+						dialog.setExtra(noteExtra);
+						dialog.setButtonsText(notePositive, noteNegative);
 						dialog.show();
 					} else {
 						mRecord.setClickable(true);
@@ -151,6 +169,28 @@ public class RecordActivity extends Activity implements
 		filter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
 		filter.addAction(MediaErrorBroadcastReceiver.ACTION_PHONE_STATE_CHANGED);
 		registerReceiver(mReceiver, filter);
+		final Resources res = getResources();
+		
+		bluetoothDrawable = res.getDrawable(R.drawable.ic_source_bluetooth);
+		micDrawable        = res.getDrawable(R.drawable.ic_source_mic);
+		
+		Rect bounds = new Rect(0, 0, bluetoothDrawable.getIntrinsicWidth(), bluetoothDrawable.getIntrinsicHeight());
+		bluetoothDrawable.setBounds(bounds);
+		bounds.set(0, 0, micDrawable.getIntrinsicWidth(), micDrawable.getIntrinsicHeight());
+		micDrawable.setBounds(bounds);
+		
+		// preload  text resources
+		saveTitle           = res.getString(R.string.saveDialog_title); 
+		saveExtra           = res.getString(R.string.saveDialog_extra);			
+		savePositive        = res.getString(R.string.saveDialog_positive);
+		saveNegative        = res.getString(R.string.saveDialog_negative);
+		noteTitle           = res.getString(R.string.noteDialog_title); 
+		noteExtra           = res.getString(R.string.noteDialog_extra);			
+		notePositive        = res.getString(R.string.noteDialog_positive);
+		noteNegative        = res.getString(R.string.noteDialog_negative);
+		
+		sourceTextBluetooth = res.getString(R.string.source_bluetooth);
+		sourceTextMic       = res.getString(R.string.source_mic);
 	}
 
 	@Override
@@ -163,9 +203,7 @@ public class RecordActivity extends Activity implements
 				stopRecording();
 				new File(tmpPath).delete();
 			}
-			audioManager.stopBluetoothSco();
-			if(!useBluetooth)
-                unregisterReceiver(bluetoothReceiver);
+			bluetoothAudioManager.finish();
 			mHandler.removeCallbacks(timeRunnable);
 		}
 	}
@@ -198,6 +236,7 @@ public class RecordActivity extends Activity implements
 	}
 
 	private void startRecording() {
+		boolean useBluetooth = bluetoothAudioManager.isBluetoothAvailable();
 		Log.w(tag, "startRecording , use Bluetooth? "+useBluetooth);
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -223,6 +262,7 @@ public class RecordActivity extends Activity implements
 			Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 			return;
 		}
+		
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory()
 				.getPath());
 		startSize = stat.getAvailableBlocks();
@@ -235,6 +275,15 @@ public class RecordActivity extends Activity implements
 		mItem.setTime(startTime);
 		isRecording = true;
 		mRecord.setText(R.string.button_stop);
+		Drawable drawable = micDrawable;
+		String txt = sourceTextMic;
+		if(useBluetooth){
+			drawable = bluetoothDrawable;
+			txt = sourceTextBluetooth;
+		}
+		audioSource.setText(txt);
+		audioSource.setCompoundDrawables(null, drawable, null, null);
+		audioSource.setVisibility(View.VISIBLE);
 		/*
 		 * Add delay to ensure that the recoding already started
 		 */
@@ -254,6 +303,8 @@ public class RecordActivity extends Activity implements
 			isRecording = false;
 			mRecord.setText(R.string.button_record);
 		}
+		audioSource.setVisibility(View.INVISIBLE);
+
 	}
 
 	private final OnClickListener listener = new OnClickListener() {
@@ -268,13 +319,9 @@ public class RecordActivity extends Activity implements
 				Message msg = mHandler.obtainMessage();
 				msg.what = DIALOG_STOP;
 				dialog.setDismissMessage(msg);
-				dialog.setTitle(getResources().getString(
-						R.string.saveDialog_title));
-				dialog.setExtra(getResources().getString(
-						R.string.saveDialog_extra));
-				dialog.setButtonsText(
-						getResources().getString(R.string.saveDialog_positive),
-						getResources().getString(R.string.saveDialog_negative));
+				dialog.setTitle(saveTitle);
+				dialog.setExtra(saveExtra);
+				dialog.setButtonsText(savePositive, saveNegative);
 				dialog.show();
 				txt = "displaying options";
 			} else {
@@ -325,11 +372,14 @@ public class RecordActivity extends Activity implements
 
 		@Override
 		public void onInfo(MediaRecorder mr, int what, int extra) {
+			Log.i(tag, "MediInfo "+what+":"+extra);
 		}
 	};
 
 	@Override
 	public void onError() {
+		Log.e(tag, "MediError");
+
 		if (isRecording)
 			stopRecording();
 
@@ -340,28 +390,6 @@ public class RecordActivity extends Activity implements
 		// TODO Auto-generated method stub
 
 	}
-	BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int state = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -1);
-            Log.d(tag, "Audio SCO state: " + state);
-
-            if (AudioManager.SCO_AUDIO_STATE_CONNECTED == state) { 
-                /* 
-                 * Now the connection has been established to the bluetooth device. 
-                 * Record audio or whatever (on another thread).With AudioRecord you can record with an object created like this:
-                 * new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO,
-                 * AudioFormat.ENCODING_PCM_16BIT, audioBufferSize);
-                 *
-                 * After finishing, don't forget to unregister this receiver and
-                 * to stop the bluetooth connection with am.stopBluetoothSco();
-                 */
-            	useBluetooth = true;
-                unregisterReceiver(this);
-            }
-
-        }
-    };
 
 }

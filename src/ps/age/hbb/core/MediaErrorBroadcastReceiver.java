@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class MediaErrorBroadcastReceiver extends BroadcastReceiver {
 	public static final String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
@@ -12,6 +13,7 @@ public class MediaErrorBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context arg0, Intent intent) {
+		Log.e("MediaErrorBroadcastReceiver", intent.getAction());
 		if (mListener == null)
 			return;
 

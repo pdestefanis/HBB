@@ -13,7 +13,10 @@
     <string name="time_elapsed">Elapsed     :</string> 
     <string name="time_remaining">Remaining :</string>
     <string name="button_record">Record</string> 
-    <string name="button_stop">Stop</string> 
+    <string name="button_stop">Stop</string>
+    <string name="source_bluetooth">Source: Bluetooth</string>
+    <string name="source_mic">Source: Internal Mic</string>
+    
     <string name="clearDialog_positive">Yes</string>
     <string name="clearDialog_negative">No</string>
     <string name="clearDialog_title">Clear marks</string>
@@ -49,7 +52,6 @@
     <string name="cry1">Yes</string>
     <string name="cry2">No</string>
     <string name="cry3">N/A</string>
-    
     <string name="ventilation_lable">Did you have to start bag and mask ventilation?</string>
     <string name="ventilation1">Yes</string>
     <string name="ventilation2">No</string>
@@ -57,6 +59,7 @@
     <string name="primary_lable">Primary cause of death</string>
     <string name="other_lable">If &#8220;Malformation&#8221; or &#8220;Other&#8221;, please specify:</string>
     <string name="problem_lable">Problems when using the system:</string>
+    <string name="source_lable">Audio Source: </string>
     <string-array name="primary_array">
         <item>N/A</item>
         <item>Fresh stillbirth</item>
