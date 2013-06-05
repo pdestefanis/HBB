@@ -4,25 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import ps.age.hbb.core.BluetoothAudioManager;
 import ps.age.hbb.core.MediaErrorBroadcastReceiver;
 import ps.age.hbb.core.MediaRecordEventListener;
 import ps.age.hbb.core.RecordItem;
-import ps.age.hbb.core.DBWraper;
+import ps.age.hbb.core.RecordItem.State;
+import ps.age.hbb.core.SharedObjects;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@SuppressLint("HandlerLeak")
 public class RecordActivity extends Activity implements
 		MediaRecordEventListener {
 	
@@ -61,7 +59,7 @@ public class RecordActivity extends Activity implements
 	
 	private RecordItem mItem;
 	private DateFormat fmt = DateFormat.getDateTimeInstance();
-	private SimpleDateFormat timerFormat = new SimpleDateFormat("HH:mm:ss");
+	private SimpleDateFormat timerFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
 	private String noteTitle;
 	private String noteExtra;
@@ -91,6 +89,7 @@ public class RecordActivity extends Activity implements
 	private float secSizeInBlocks;
 
 	/** Called when the activity is first created. */
+	@SuppressLint("HandlerLeak")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,7 +145,7 @@ public class RecordActivity extends Activity implements
 						startActivityForResult(intent,
 								ExtraActivity.REQUEST_CODE);
 					} else {
-						saveItem();
+						SharedObjects.getDataManager(getApplicationContext()).addItem(mItem);
 						finish();
 					}
 					break;
@@ -220,21 +219,17 @@ public class RecordActivity extends Activity implements
 		Log.w(tag, "onActivity Result");
 		if ((requestCode == ExtraActivity.REQUEST_CODE) && (data != null)) {
 			mItem = (RecordItem) data.getSerializableExtra(ExtraActivity.ITEM);
-			saveItem();
+			SharedObjects.getDataManager(getApplicationContext()).addItem(mItem);
+//			saveItem();
 		}
 		finish();
 
 	}
-
+/*
 	private void saveItem() {
-		Log.w(tag, "saving recoed Item");
-		if(mItem.getExtra() != null)
-			Log.w(tag, "extra: "+mItem.getExtra());
-		DBWraper wraper = new DBWraper(RecordActivity.this);
-		wraper.insertRecord(mItem);
-		wraper.close();
-	}
 
+	}
+*/
 	private void startRecording() {
 		boolean useBluetooth = bluetoothAudioManager.isBluetoothAvailable();
 		Log.w(tag, "startRecording , use Bluetooth? "+useBluetooth);
@@ -273,6 +268,7 @@ public class RecordActivity extends Activity implements
 		mItem = new RecordItem();
 		mItem.setPath(tmpPath);
 		mItem.setTime(startTime);
+		mItem.setState(State.NEW);
 		isRecording = true;
 		mRecord.setText(R.string.button_stop);
 		Drawable drawable = micDrawable;
@@ -335,29 +331,28 @@ public class RecordActivity extends Activity implements
 
 	};
 	Runnable timeRunnable = new Runnable() {
-		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
 
 		int prevSec = -1;
 
 		@Override
 		public void run() {
-
-			date.setTime(System.currentTimeMillis());
+			cal.setTimeInMillis(System.currentTimeMillis());
 			// Check if the seconds changed
-			if (date.getSeconds() != prevSec) {
+			if (cal.get(Calendar.SECOND) != prevSec) {
 
-				prevSec = date.getSeconds();
-				systemTime.setText(fmt.format(date));
+				prevSec = cal.get(Calendar.SECOND);
+				systemTime.setText(fmt.format(cal.getTime()));
 
 				if (isRecording) {
 					totalTime = System.currentTimeMillis() - startTime;
-					date.setTime(totalTime);
-					elapsedTime.setText(timerFormat.format(date));
+					cal.setTimeInMillis(totalTime);
+					elapsedTime.setText(timerFormat.format(cal.getTime()));
 					int remaning = (int) (startSize - (secSizeInBlocks
 							* totalTime / 1000));
 					long howmuch = (long) (remaning * 1000 / secSizeInBlocks);
-					date.setTime(howmuch);
-					remainingTime.setText(timerFormat.format(date));
+					cal.setTimeInMillis(howmuch);
+					remainingTime.setText(timerFormat.format(cal.getTime()));
 				}
 			}
 			// check if activity is finished
@@ -391,5 +386,5 @@ public class RecordActivity extends Activity implements
 
 	}
 
-
+	
 }

@@ -4,11 +4,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@android:color/white" >
-    <RelativeLayout
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/list_header_background" >
-
+
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
@@ -43,7 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textColor="@android:color/black"
-            android:text="@string/help"
+            android:text="@string/about_text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </ScrollView>

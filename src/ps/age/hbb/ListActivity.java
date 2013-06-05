@@ -4,10 +4,14 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
+import ps.age.hbb.core.DataManager;
 import ps.age.hbb.core.RecordItem;
 import ps.age.hbb.core.DBWraper;
+import ps.age.hbb.core.RecordItem.State;
+import ps.age.hbb.core.SharedObjects;
 import ps.age.hbb.net.WebClient;
 
 import android.annotation.SuppressLint;
@@ -51,7 +55,7 @@ public class ListActivity extends Activity {
 	public static final String TAG = ListActivity.class.getSimpleName();
 	public static final int DELETE_DIALOG = 321;
 	/** Called when the activity is first created. */
-	ArrayList<RecordItem> mList;
+	List<RecordItem> mList;
 	private DateFormat fmt = DateFormat.getDateTimeInstance();
 
 	private ProgressDialog mProgressDialog;
@@ -118,10 +122,13 @@ public class ListActivity extends Activity {
 				 */
 				Log.e(TAG, "Long click "+String.valueOf(position)+
 							"time "+String.valueOf(mList.get(position).getUploadTime()));	
-				if (mList.get(position).getUploadTime() > 0)
-					return false;
-
-				return true;
+				switch(mList.get(position).getState()){
+					case EDITED:
+					case UPLOADED:
+						return false;
+					default:
+						return true;
+				}
 			}
 
 		});
@@ -219,12 +226,11 @@ public class ListActivity extends Activity {
 	 */
 	private void deleteRecord(int position) {
 		Log.e(TAG, "deleting record "+String.valueOf(position));
-		DBWraper wraper = new DBWraper(this);
 		RecordItem item = mList.get(position);
 		mList.remove(position);
-		wraper.deleteRecord(item);
-		new File(item.getPath()).delete();
+
 		mAdapter.notifyDataSetChanged();
+		SharedObjects.getDataManager(getApplicationContext()).deleteItem(item);
 		// No more records , finish the activity
 		if (mList.size() == 0)
 			finish();
@@ -238,7 +244,7 @@ public class ListActivity extends Activity {
 		Date date = new Date();
 
 		public MenuAdapter(Context context, int layoutResourceId,
-				ArrayList<RecordItem> data) {
+				List<RecordItem> data) {
 			super(context, layoutResourceId, data);
 			this.layoutResourceId = layoutResourceId;
 			this.context = context;
@@ -249,6 +255,7 @@ public class ListActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LinearLayout row = (LinearLayout) convertView;
 			RecordItem item = data[position];
+			Log.e("tag", "ListItem: " + position + ": " +item.getPath() + " : " + item.getState().name());
 			if (row == null) {
 
 				LayoutInflater inflater = ((Activity) context)
@@ -269,27 +276,34 @@ public class ListActivity extends Activity {
 				extra_ident.setText(extra_id);
 			}
 			int totalMarks = item.getTotalMarks();
-			if (item.getUploadTime() > 0) {
-
+			switch(item.getState()){
+			case NEW:
+				view.setBackgroundResource(R.drawable.background_new);
+				marks.setText("");
+				break;
+			case UPLOADED:
 				view.setBackgroundResource(R.drawable.background_uploaded);
 				if (totalMarks != 0) {
 					marks.setTextColor(Color.BLACK);
 					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
-				} else
-					marks.setText("error");
-			} else {
-				// no mark set
-				if (totalMarks == 0) {
-					view.setBackgroundResource(R.drawable.background_nomarks);
-					marks.setText("");
 				} else {
-					view.setBackgroundResource(R.drawable.background_marks);
-					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
+					marks.setText("error");
 				}
-				
+				break;
+			case REVIEWED:
+				view.setBackgroundResource(R.drawable.background_reviewed);
+				marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
+				break;
+			case EDITED:
+				view.setBackgroundResource(R.drawable.background_edited);
+				if (totalMarks != 0) {
+					marks.setTextColor(Color.BLACK);
+					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
+				} else {
+					marks.setText("error");
+				}
+				break;
 			}
-			Log.e(TAG, "adding item");
-			Log.e(TAG, title.getText()+":"+marks.getText()+":"+extra_id);
 		
 			return row;
 		}
@@ -304,17 +318,23 @@ public class ListActivity extends Activity {
 			ArrayList<RecordItem> list = new ArrayList<RecordItem>();
 
 			for (RecordItem item : mList) {
-				if (item.isReviewed())
+				switch(item.getState()){
+				case REVIEWED:
+				case EDITED:
 					list.add(item);
+				default:
+				}
 			}
-
+			if(list.size() == 0) {
+				return true;
+			}
 			if (WebClient.synchronizeRecords(userName, "key", list)) {
-				DBWraper wraper = new DBWraper(ListActivity.this);
+				DataManager manager = SharedObjects.getDataManager(getApplication());
 				for (RecordItem item : list) {
 					item.setUploadTime(System.currentTimeMillis());
-					wraper.updateRecord(item);
+					item.setState(State.UPLOADED);
+					manager.updateItem(item);
 				}
-				wraper.close();
 				return true;
 			}
 			return false;
@@ -339,18 +359,17 @@ public class ListActivity extends Activity {
 	}
 
 	private class LoadListTask extends
-			AsyncTask<Void, Void, ArrayList<RecordItem>> {
+			AsyncTask<Void, Void, List<RecordItem>> {
 		@Override
-		protected ArrayList<RecordItem> doInBackground(Void... args) {
-			DBWraper wraper = new DBWraper(ListActivity.this);
-			ArrayList<RecordItem> list = wraper.getRecordsList();
-			wraper.close();
+		protected List<RecordItem> doInBackground(Void... args) {
+			DataManager manager = SharedObjects.getDataManager(getApplicationContext());
+			List<RecordItem> list = manager.getItems();
 
 			return list;
 		}
 
 		@Override
-		protected void onPostExecute(ArrayList<RecordItem> result) {
+		protected void onPostExecute(List<RecordItem> result) {
 			mProgressDialog.dismiss();
 			mList = result;
 			if (result != null && (!isFinishing())) {

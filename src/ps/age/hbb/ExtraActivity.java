@@ -60,17 +60,19 @@ public class ExtraActivity extends Activity {
 		setContentView(R.layout.extra);
 		Log.e(tag, "onCreate");
 
-		mSave = (Button) findViewById(R.id.button_save);
-		cryGroup = (RadioGroup) findViewById(R.id.radioCry);
-		ventilationGroup = (RadioGroup) findViewById(R.id.radioVentilation);
-		mPrimary = (Spinner) findViewById(R.id.primary_spinner);
-		mProblem = (EditText) findViewById(R.id.problem_editText);
-		mOther = (EditText) findViewById(R.id.other_editText);
-		mID = (EditText) findViewById(R.id.id_editText);
-		mBack = (ImageView) findViewById(R.id.back);
-		mAlive = (ToggleButton) findViewById(R.id.alive_toggle);
+		mSave 				= (Button) findViewById(R.id.button_save);
+		cryGroup 			= (RadioGroup) findViewById(R.id.radioCry);
+		ventilationGroup 	= (RadioGroup) findViewById(R.id.radioVentilation);
+		mPrimary 			= (Spinner) findViewById(R.id.primary_spinner);
+		mProblem 			= (EditText) findViewById(R.id.problem_editText);
+		mOther 				= (EditText) findViewById(R.id.other_editText);
+		mID 				= (EditText) findViewById(R.id.id_editText);
+		mBack 				= (ImageView) findViewById(R.id.back);
+		mAlive 				= (ToggleButton) findViewById(R.id.alive_toggle);
+		
 		mAdapter = ArrayAdapter.createFromResource(this, R.array.primary_array,
 				android.R.layout.simple_spinner_item);
+		
 		mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mPrimary.setAdapter(mAdapter);
 		// make sure that the spinner and editText box are disabled
@@ -107,6 +109,7 @@ public class ExtraActivity extends Activity {
 
 		});
 		mItem = (RecordItem) getIntent().getSerializableExtra(ITEM);
+		Log.e(tag, "extraActivity itemState: " + mItem.getState().name());
 		mSave.setOnClickListener(listener);
 		if (mItem.getExtra() != null) {
 			Log.e(tag, "Item has extra: "+mItem.getExtra());

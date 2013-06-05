@@ -13,4 +13,5 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:background="@drawable/blackbutton" android:layout_margin="10.0dip" android:text="@string/main_help"  style="@style/ButtonStyle" />
+        
 </LinearLayout>

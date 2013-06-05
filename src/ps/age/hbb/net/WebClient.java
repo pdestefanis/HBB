@@ -37,12 +37,12 @@ import android.util.Log;
 
 public class WebClient {
 
-	private static HttpPost mPost;
 	private static HttpClient mClient;
 	/*
 	 * Server URL
 	 */
-	private static String uploadURL = "http://helpingbabybreath.appspot.com/data";
+//	private static String uploadURL = "http://helpingbabybreath.appspot.com/data";
+	private static String uploadURL = "http://10.0.0.6:8080/data";
 
 	/*
 	 * URL variables
@@ -128,14 +128,14 @@ public class WebClient {
 
 		getHTTPClient();
 
-		mPost = new HttpPost(url);
+		HttpPost post = new HttpPost(url);
 
 		for (NameValuePair pair : parameters)
 			Log.e(tag, pair.getName() + ":" + pair.getValue());
 
 		try {
 
-			mPost.setEntity(new UrlEncodedFormEntity(parameters));
+			post.setEntity(new UrlEncodedFormEntity(parameters));
 
 		} catch (UnsupportedEncodingException e) {
 
@@ -147,7 +147,7 @@ public class WebClient {
 		}
 
 		try {
-			HttpResponse response = mClient.execute(mPost);
+			HttpResponse response = mClient.execute(post);
 			StatusLine status_line = response.getStatusLine();
 			int status_code = status_line.getStatusCode();
 			/*

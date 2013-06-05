@@ -86,7 +86,17 @@
             android:text="@string/initial"
             android:textColor="@android:color/black" />
     </RelativeLayout>
-
+
+
+
+
+
+
+
+
+
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -94,13 +104,16 @@
         android:layout_marginBottom="5dp"
         android:layout_weight="1"
         android:orientation="vertical" >
-
+
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="1" >
-
+
+
             <ImageView
                 android:id="@+id/mark1"
                 android:layout_width="wrap_content"
@@ -118,13 +131,16 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@android:color/black" />
         </LinearLayout>
-
+
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="1" >
-
+
+
             <ImageView
                 android:id="@+id/mark2"
                 android:layout_width="wrap_content"
@@ -142,13 +158,16 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@android:color/black" />
         </LinearLayout>
-
+
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="1" >
-
+
+
             <ImageView
                 android:id="@+id/mark3"
                 android:layout_width="wrap_content"
@@ -166,13 +185,16 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@android:color/black" />
         </LinearLayout>
-
+
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="1" >
-
+
+
             <ImageView
                 android:id="@+id/mark4"
                 android:layout_width="wrap_content"
@@ -189,9 +211,15 @@
                 android:text="@string/initial"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@android:color/black" />
-        </LinearLayout>
+        </LinearLayout> 
     </LinearLayout>
-
+
+
+
+
+
+
+
     <TextView
         android:id="@+id/form_textView"
         android:layout_width="wrap_content"

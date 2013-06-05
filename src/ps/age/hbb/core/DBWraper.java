@@ -1,6 +1,7 @@
 package ps.age.hbb.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,21 +14,21 @@ import android.util.Log;
 public class DBWraper {
 	public static final String tag = DBWraper.class.getSimpleName();
 	private static final String DATABASE_NAME = "database.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 4;
 	private Context context;
 	private SQLiteDatabase db;
 	private OpenHelper openHelper;
-	public static final String RECORD_TABLE = "record";
-	public static final String RECORD_PATH = "path";
-	public static final String RECORD_EXTRA = "extra";
-	public static final String RECORD_MARK_FIRST = "first";
-	public static final String RECORD_MARK_SECOND = "second";
-	public static final String RECORD_MARK_THIRD = "third";
-	public static final String RECORD_MARK_FOURTH = "fourth";
-	public static final String RECORD_ID = "_id";
-	public static final String RECORD_TIME = "time";
-	public static final String RECORD_TIME_UPLOAD = "upload";
-
+	public static final String RECORD_TABLE 		= "record";
+	public static final String RECORD_PATH 			= "path";
+	public static final String RECORD_EXTRA 		= "extra";
+	public static final String RECORD_MARK_FIRST 	= "first";
+	public static final String RECORD_MARK_SECOND 	= "second";
+	public static final String RECORD_MARK_THIRD 	= "third";
+	public static final String RECORD_MARK_FOURTH 	= "fourth";
+	public static final String RECORD_ID 			= "_id";
+	public static final String RECORD_TIME 			= "time";
+	public static final String RECORD_TIME_UPLOAD 	= "upload";
+	public static final String RECORD_STATE         = "state";
 	public DBWraper(Context context) {
 		this.context = context;
 		openHelper = new OpenHelper(this.context);
@@ -47,7 +48,7 @@ public class DBWraper {
 		values.put(RECORD_MARK_THIRD, item.getMark(2));
 		values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());
-
+		values.put(RECORD_STATE, item.getState().ordinal());
 		// inserted successfully
 		if (db.insert(RECORD_TABLE, null, values) != -1) {
 			success = true;
@@ -68,7 +69,7 @@ public class DBWraper {
 		values.put(RECORD_MARK_THIRD, item.getMark(2));
 		values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());
-
+		values.put(RECORD_STATE, item.getState().ordinal());
 		int numRows = db.update(RECORD_TABLE, values, "_id=?",
 				new String[] { Long.toString(item.getId()) });
 		Log.e(tag, "updateRecord " + String.valueOf(numRows));
@@ -78,22 +79,22 @@ public class DBWraper {
 		return false;
 	}
 
-	public ArrayList<RecordItem> getRecordsList() {
+	public List<RecordItem> getRecordsList() {
 		Log.e(tag, "getRecordsList");
 		Cursor cursor = db.query(RECORD_TABLE, null, null, null, null, null,
 				RECORD_ID);
 		ArrayList<RecordItem> list = null;
 		if ((cursor != null) && cursor.moveToFirst()) {
-			int path = cursor.getColumnIndex(RECORD_PATH);
-			int id = cursor.getColumnIndex(RECORD_ID);
-			int time = cursor.getColumnIndex(RECORD_TIME);
-			int extra = cursor.getColumnIndex(RECORD_EXTRA);
-			int first = cursor.getColumnIndex(RECORD_MARK_FIRST);
-			int second = cursor.getColumnIndex(RECORD_MARK_SECOND);
-			int third = cursor.getColumnIndex(RECORD_MARK_THIRD);
-			int fourth = cursor.getColumnIndex(RECORD_MARK_FOURTH);
-			int upload = cursor.getColumnIndex(RECORD_TIME_UPLOAD);
-
+			int path 	= cursor.getColumnIndex(RECORD_PATH);
+			int id 		= cursor.getColumnIndex(RECORD_ID);
+			int time 	= cursor.getColumnIndex(RECORD_TIME);
+			int extra 	= cursor.getColumnIndex(RECORD_EXTRA);
+			int first 	= cursor.getColumnIndex(RECORD_MARK_FIRST);
+			int second 	= cursor.getColumnIndex(RECORD_MARK_SECOND);
+			int third 	= cursor.getColumnIndex(RECORD_MARK_THIRD);
+			int fourth 	= cursor.getColumnIndex(RECORD_MARK_FOURTH);
+			int upload 	= cursor.getColumnIndex(RECORD_TIME_UPLOAD);
+			int state 	= cursor.getColumnIndex(RECORD_STATE);
 			list = new ArrayList<RecordItem>();
 			do {
 				RecordItem item = new RecordItem();
@@ -106,6 +107,8 @@ public class DBWraper {
 				item.setMark(2, cursor.getLong(third));
 				item.setMark(3, cursor.getLong(fourth));
 				item.setUploadTime(cursor.getLong(upload));
+				item.setState(RecordItem.State.values()[cursor.getInt(state)]);
+				item.init();
 				list.add(item);
 			} while (cursor.moveToNext());
 			cursor.close();
@@ -142,7 +145,8 @@ public class DBWraper {
 					+ " INTEGER NULL, " + RECORD_MARK_SECOND + " INTEGER NULL,"
 					+ RECORD_MARK_THIRD + " INTEGER NULL, "
 					+ RECORD_MARK_FOURTH + " INTEGER NULL, "
-					+ RECORD_TIME_UPLOAD + " INTEGER NULL)");
+					+ RECORD_TIME_UPLOAD + " INTEGER NULL, "
+					+ RECORD_STATE + " INTEGER NOT NULL)");
 		}
 
 		@Override
@@ -153,7 +157,7 @@ public class DBWraper {
 			try {
 
 				db.execSQL("ALTER TABLE " + RECORD_TABLE + " ADD COLUMN "
-						+ RECORD_TIME_UPLOAD + " INTEGER NULL;");
+						+ RECORD_STATE + " INTEGER DEFAULT 0;");
 			} catch (SQLException e) {
 				Log.e(tag, "Error executing SQL: ", e);
 				// If the error is "duplicate column name" then everything is

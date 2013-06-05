@@ -3,10 +3,12 @@ package ps.age.hbb;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import ps.age.hbb.core.RecordItem;
-import ps.age.hbb.core.DBWraper;
+import ps.age.hbb.core.RecordItem.State;
+import ps.age.hbb.core.SharedObjects;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -54,19 +56,17 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener,
 	private TextView currentTime;
 	private TextView endTime;
 	private TextView reviewForm;
-	private SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss");
+	private SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss", Locale.US);
 	private Date date = new Date();
 
 	private boolean isPlaying;
 	private boolean isReady = false;
-	private DBWraper mWraper;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.e(tag, "onCreate");
-		mWraper = new DBWraper(this);
 		mItem = (RecordItem) getIntent().getSerializableExtra("item");
 		fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -124,20 +124,20 @@ public class HBBActivity extends Activity implements OnSeekBarChangeListener,
 				mPlayer = null;
 
 			}
-
-			new Thread() {
-				@Override
-				public void run() {
-					try{
-						Log.w(tag, "Background thread");
-						mWraper.updateRecord(mItem);
-						mWraper.close();
-					}catch(Exception e){
-						Log.e(tag, "this should never happen "+e.toString());
-						e.printStackTrace();
+			if(mItem.getTotalMarks()  > 0){
+				switch(mItem.getState()){
+				case NEW:
+					mItem.setState(State.REVIEWED);
+					break;
+				case UPLOADED:
+					if(mItem.hasChanged()){
+						mItem.setState(State.EDITED);
 					}
+					break;
 				}
-			}.start();
+			}
+			
+			SharedObjects.getDataManager(getApplicationContext()).updateItem(mItem);
 		} else {
 			if (mPlayer.isPlaying())
 				mPlayer.pause();

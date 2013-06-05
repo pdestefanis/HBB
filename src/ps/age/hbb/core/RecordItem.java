@@ -1,9 +1,11 @@
 package ps.age.hbb.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,47 +13,59 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+
+
 public class RecordItem implements Serializable {
+	public enum State {
+		NEW, REVIEWED, UPLOADED, EDITED
+	}
 	public static final String tag = RecordItem.class.getSimpleName();
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6858227128259519668L;
-	public static final String EXTRA_ID = "extra_id";
-	public static final String EXTRA_CRY = "extra_cry";
-	public static final String EXTRA_VENTILATION = "exra_vent";
-	public static final String EXTRA_OTHER = "extra_other";
-	public static final String EXTRA_PROBLEM = "extra_problem";
-	public static final String EXTRA_PRIMARY = "extra_primary";
-	public static final String EXTRA_ALIVE = "extra_alive";
-	private static final int TOTAL_MARKS = 4;
-
-	private static final String ID = "id";
-	private static final String VALUE = "value";
-	private static final int ID_IDENT = 1;
-	private static final int ID_PRIMARY = 2;
-	private static final int ID_CRY = 3;
+	
+	public static final String EXTRA_ID 			= "extra_id";
+	public static final String EXTRA_CRY 		 	= "extra_cry";
+	public static final String EXTRA_VENTILATION 	= "exra_vent";
+	public static final String EXTRA_OTHER 			= "extra_other";
+	public static final String EXTRA_PROBLEM 		= "extra_problem";
+	public static final String EXTRA_PRIMARY 		= "extra_primary";
+	public static final String EXTRA_ALIVE 			= "extra_alive";
+	private static final String ID 					= "id";
+	private static final String VALUE 				= "value";
+	
+	private static final int TOTAL_MARKS 	= 4;
+	private static final int ID_IDENT   	= 1;
+	private static final int ID_PRIMARY 	= 2;
+	private static final int ID_CRY 		= 3;
 	private static final int ID_VENTILATION = 4;
-	private static final int ID_OTHER = 5;
-	private static final int ID_PROBLEM = 6;
-	private static final int ID_ALIVE = 7;
+	private static final int ID_OTHER 		= 5;
+	private static final int ID_PROBLEM 	= 6;
+	private static final int ID_ALIVE 		= 7;
 	/**
 	 * 
 	 */
 	private long id;
-
-	long[] marksArray = new long[TOTAL_MARKS];
+	private long time;
 
 	private int length;
 	private String path;
-	transient private JSONObject extra = new JSONObject();
-	private long time;
 	private long uploadTime = -1;
-
+	
+	long[] marksArray = new long[TOTAL_MARKS];
+	transient private JSONObject extra = new JSONObject();
+	private State mState;
+	private boolean mChanged;
 	public long getId() {
 		return id;
 	}
-
+	public State getState(){
+		return mState;
+	}
+	public void setState(State state){
+		mState = state;
+	}
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -65,7 +79,10 @@ public class RecordItem implements Serializable {
 
 	public void setMark(int position, long value) {
 		// fix for old HBB db where value is init to -1
-		marksArray[position] = value > 0 ? value : 0;
+		if(marksArray[position] != value ) {
+			mChanged = true;
+			marksArray[position] = value > 0 ? value : 0;
+		}
 
 	}
 
@@ -91,7 +108,12 @@ public class RecordItem implements Serializable {
 		else
 			return null;
 	}
-
+	public void init(){
+		mChanged = false;
+	}
+	public boolean hasChanged(){
+		return mChanged;
+	}
 	public void setExtra(String extra) {
 		if (extra == null)
 			this.extra = new JSONObject();
@@ -147,7 +169,6 @@ public class RecordItem implements Serializable {
 				this.extra = new JSONObject();
 			}
 		}
-
 	}
 
 	public long getTime() {
@@ -195,6 +216,8 @@ public class RecordItem implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		mChanged = true;
+
 	}
 
 	public String getExtraString(String key) {
@@ -240,6 +263,25 @@ public class RecordItem implements Serializable {
 			extra = new JSONObject(builder.toString());
 		} catch (JSONException e) {
 			Log.e(tag, "read object " + e.toString());
+		}
+	}
+/**
+ * Check if the recorded file path matches it's Form ID if not match them
+ */
+	public void matchNameToPath() {
+		String recID = getExtraString(RecordItem.EXTRA_ID);
+		if ( recID != null && (!recID.equals(""))){
+			recID = recID.toLowerCase(Locale.US).replace(" ", "");
+			String[] parts = getPath().split("/");
+			String name = parts[parts.length - 1].split("\\.")[0];
+			if (!name.equals(recID)){
+				String newPath = getPath().replace(name, recID);
+				Boolean success = new File(getPath()).renameTo(new File(newPath));
+				if (success) {
+					path = newPath;
+					
+				}
+			}
 		}
 	}
 }

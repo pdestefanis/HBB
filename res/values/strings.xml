@@ -16,7 +16,7 @@
     <string name="button_stop">Stop</string>
     <string name="source_bluetooth">Source: Bluetooth</string>
     <string name="source_mic">Source: Internal Mic</string>
-    
+    <string name="about">About</string>
     <string name="clearDialog_positive">Yes</string>
     <string name="clearDialog_negative">No</string>
     <string name="clearDialog_title">Clear marks</string>
@@ -77,4 +77,15 @@
     <string name="dead">dead</string>
     
     <string name="review_form">Review Form</string>
+    
+    
+    <string name="about_text">Helping Baby Breath Mobile Application \n \n
+        Colors Legend: \n
+        1- Blue: new report that waits reviewing. \n
+        2- Green: Reviewed report and ready to be uploaded. \n
+        3- White: Already uploaded report (Can be deleted). \n
+        4- Red: Edited report after uploading (can be reuploaded or deleted). \n \n
+        
+        to delete a report please use long click a pop up will appear with delete option.  
+        </string>
 </resources>
