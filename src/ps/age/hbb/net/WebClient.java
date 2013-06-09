@@ -26,6 +26,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,22 +42,24 @@ public class WebClient {
 	/*
 	 * Server URL
 	 */
-//	private static String uploadURL = "http://helpingbabybreath.appspot.com/data";
-	private static String uploadURL = "http://10.0.0.6:8080/data";
+	private static String uploadURL = "http://helpingbabybreath.appspot.com/data";
+//	private static String uploadURL = "http://10.0.0.6:8080/data";
 
 	/*
 	 * URL variables
 	 */
-	public static final String USER_NAME = "user";
-	public static final String AUTH_KEY = "auth";
-	public static final String FIRST_MARK = "first_mark";
-	public static final String SECOND_MARK = "second_mark";
-	public static final String THIRD_MARK = "third_mark";
-	public static final String FOURTH_MARK = "fourth_mark";
+	public static final String USER_NAME 	= "user";
+	public static final String AUTH_KEY 	= "auth";
+	public static final String FIRST_MARK 	= "first_mark";
+	public static final String SECOND_MARK 	= "second_mark";
+	public static final String THIRD_MARK 	= "third_mark";
+	public static final String FOURTH_MARK 	= "fourth_mark";
 	public static final String TIME_CREATED = "time_created";
 	public static final String TOTAL_LENGTH = "length";
-	public static final String EXTRA = "extra";
-
+	public static final String SERVER_KEY   = "key";
+	public static final String LOCAL_KEY    = "id";
+	public static final String EXTRA 		= "extra";
+	
 	private static String mResponse;
 	private static String errorMessage;
 	private static final String tag = WebClient.class.getSimpleName();
@@ -91,14 +94,11 @@ public class WebClient {
 	public static synchronized boolean upload(String userName, String authKey,
 			RecordItem item) {
 
-		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
-				7);
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(9);
 
 		nameValuePairs.add(new BasicNameValuePair(USER_NAME, userName));
 		nameValuePairs.add(new BasicNameValuePair(TIME_CREATED, String
 				.valueOf(item.getTime())));
-		// nameValuePairs.add(new
-		// BasicNameValuePair(TOTAL_LENGTH,String.valueOf(item.getLength())));
 		nameValuePairs.add(new BasicNameValuePair(FIRST_MARK, String
 				.valueOf(item.getMark(0))));
 		nameValuePairs.add(new BasicNameValuePair(SECOND_MARK, String
@@ -108,21 +108,38 @@ public class WebClient {
 		nameValuePairs.add(new BasicNameValuePair(FOURTH_MARK, String
 				.valueOf(item.getMark(3))));
 		nameValuePairs.add(new BasicNameValuePair(EXTRA, item.getExtra()));
+		nameValuePairs.add(new BasicNameValuePair(LOCAL_KEY, String.valueOf(item.getId())));
+		nameValuePairs.add(new BasicNameValuePair(SERVER_KEY, item.getServerKey() == null ? "" : item.getServerKey()));
 		return postToServer(uploadURL, nameValuePairs);
 	}
 
 	public static boolean synchronizeRecords(String userName, String authKey,
 			ArrayList<RecordItem> mList) {
 		boolean ok = true;
+		JSONArray array = new JSONArray();
 		for (RecordItem item : mList) {
 			ok = upload(userName, authKey, item);
+			
 			Log.e(tag, "item");
-			if (!ok)
+			if (!ok) {
 				break;
+			} else {
+				try {
+				JSONObject obj = new JSONObject();
+				obj.put(SERVER_KEY, mResponse);
+				obj.put(LOCAL_KEY, item.getId());
+				array.put(obj);
+				} catch(JSONException ex) {
+					Log.e(tag, ex.toString());
+				}
+
+			}
 		}
+		mResponse = array.toString();
+		Log.e(tag, "server response: " + mResponse);
 		return ok;
 	}
-
+	
 	private static boolean postToServer(String url,
 			ArrayList<NameValuePair> parameters) {
 

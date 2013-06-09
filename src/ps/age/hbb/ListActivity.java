@@ -1,15 +1,17 @@
 package ps.age.hbb;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ps.age.hbb.core.DataManager;
 import ps.age.hbb.core.RecordItem;
-import ps.age.hbb.core.DBWraper;
 import ps.age.hbb.core.RecordItem.State;
 import ps.age.hbb.core.SharedObjects;
 import ps.age.hbb.net.WebClient;
@@ -27,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -227,9 +230,10 @@ public class ListActivity extends Activity {
 	private void deleteRecord(int position) {
 		Log.e(TAG, "deleting record "+String.valueOf(position));
 		RecordItem item = mList.get(position);
-		mList.remove(position);
-
+		mList.remove(item);
+		mAdapter.setData(mList);
 		mAdapter.notifyDataSetChanged();
+		listView.forceLayout();
 		SharedObjects.getDataManager(getApplicationContext()).deleteItem(item);
 		// No more records , finish the activity
 		if (mList.size() == 0)
@@ -250,12 +254,18 @@ public class ListActivity extends Activity {
 			this.context = context;
 			this.data = data.toArray(new RecordItem[data.size()]);
 		}
+		public void setData(List<RecordItem> data){
+			this.data = data.toArray(new RecordItem[data.size()]);
+			for (RecordItem item : data) {
+				Log.d(TAG, "item: " + item.getExtraString(RecordItem.EXTRA_ID));
+			}
+		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LinearLayout row = (LinearLayout) convertView;
 			RecordItem item = data[position];
-			Log.e("tag", "ListItem: " + position + ": " +item.getPath() + " : " + item.getState().name());
+			Log.e("tag", "ListItem: " + position + ": " +item.getPath() + " : " + item.getState().name() + " serverKey: " + item.getServerKey());
 			if (row == null) {
 
 				LayoutInflater inflater = ((Activity) context)
@@ -270,10 +280,12 @@ public class ListActivity extends Activity {
 			TextView marks = (TextView) view.findViewById(R.id.item_marks);
 
 			String extra_id = item.getExtraString(RecordItem.EXTRA_ID);
+			TextView extra_ident = (TextView) view
+					.findViewById(R.id.item_id);
 			if (extra_id != null) {
-				TextView extra_ident = (TextView) view
-						.findViewById(R.id.item_id);
 				extra_ident.setText(extra_id);
+			} else {
+				extra_ident.setText("");
 			}
 			int totalMarks = item.getTotalMarks();
 			switch(item.getState()){
@@ -283,26 +295,27 @@ public class ListActivity extends Activity {
 				break;
 			case UPLOADED:
 				view.setBackgroundResource(R.drawable.background_uploaded);
-				if (totalMarks != 0) {
+				
+	//			if (totalMarks != 0) {
 					marks.setTextColor(Color.BLACK);
 					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
-				} else {
+/*				} else {
 					marks.setText("error");
 				}
-				break;
+*/				break;
 			case REVIEWED:
 				view.setBackgroundResource(R.drawable.background_reviewed);
 				marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
 				break;
 			case EDITED:
 				view.setBackgroundResource(R.drawable.background_edited);
-				if (totalMarks != 0) {
+//				if (totalMarks != 0) {
 					marks.setTextColor(Color.BLACK);
 					marks.setText(String.valueOf(totalMarks) + (String)marks.getTag());
-				} else {
+/*				} else {
 					marks.setText("error");
 				}
-				break;
+*/				break;
 			}
 		
 			return row;
@@ -316,7 +329,7 @@ public class ListActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			WebClient.setContext(getApplicationContext());
 			ArrayList<RecordItem> list = new ArrayList<RecordItem>();
-
+			
 			for (RecordItem item : mList) {
 				switch(item.getState()){
 				case REVIEWED:
@@ -330,9 +343,31 @@ public class ListActivity extends Activity {
 			}
 			if (WebClient.synchronizeRecords(userName, "key", list)) {
 				DataManager manager = SharedObjects.getDataManager(getApplication());
+				String response = WebClient.getResponse();
+				JSONArray array = null;
+				try {
+					array = new JSONArray(response);
+				}catch(JSONException ex) {
+					Log.e(TAG, "failed to parse generated jsonarray " + ex.toString());
+				}
+				
 				for (RecordItem item : list) {
+					if (array != null) {
+						try {
+							for (int i = 0; i < array.length() ; i++) {
+								JSONObject object = array.getJSONObject(i);
+								long id = object.getLong(WebClient.LOCAL_KEY);
+								if (id == item.getId()) {
+									item.setServerKey(object.getString(WebClient.SERVER_KEY));
+								}
+							}
+						} catch (JSONException excep) {
+							Log.e(TAG, "jsonex " + excep.toString());
+						}
+					}
 					item.setUploadTime(System.currentTimeMillis());
 					item.setState(State.UPLOADED);
+					
 					manager.updateItem(item);
 				}
 				return true;

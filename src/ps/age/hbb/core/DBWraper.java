@@ -14,7 +14,7 @@ import android.util.Log;
 public class DBWraper {
 	public static final String tag = DBWraper.class.getSimpleName();
 	private static final String DATABASE_NAME = "database.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 	private Context context;
 	private SQLiteDatabase db;
 	private OpenHelper openHelper;
@@ -29,6 +29,8 @@ public class DBWraper {
 	public static final String RECORD_TIME 			= "time";
 	public static final String RECORD_TIME_UPLOAD 	= "upload";
 	public static final String RECORD_STATE         = "state";
+	public static final String RECORD_KEY           = "server_key";
+	
 	public DBWraper(Context context) {
 		this.context = context;
 		openHelper = new OpenHelper(this.context);
@@ -49,6 +51,8 @@ public class DBWraper {
 		values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());
 		values.put(RECORD_STATE, item.getState().ordinal());
+		values.put(RECORD_KEY, item.getServerKey() == null ? "" : item.getServerKey());
+		
 		// inserted successfully
 		if (db.insert(RECORD_TABLE, null, values) != -1) {
 			success = true;
@@ -70,6 +74,8 @@ public class DBWraper {
 		values.put(RECORD_MARK_FOURTH, item.getMark(3));
 		values.put(RECORD_TIME_UPLOAD, item.getUploadTime());
 		values.put(RECORD_STATE, item.getState().ordinal());
+		values.put(RECORD_KEY, item.getServerKey() == null ? "" : item.getServerKey());
+
 		int numRows = db.update(RECORD_TABLE, values, "_id=?",
 				new String[] { Long.toString(item.getId()) });
 		Log.e(tag, "updateRecord " + String.valueOf(numRows));
@@ -95,6 +101,8 @@ public class DBWraper {
 			int fourth 	= cursor.getColumnIndex(RECORD_MARK_FOURTH);
 			int upload 	= cursor.getColumnIndex(RECORD_TIME_UPLOAD);
 			int state 	= cursor.getColumnIndex(RECORD_STATE);
+			int key 	= cursor.getColumnIndex(RECORD_KEY);
+
 			list = new ArrayList<RecordItem>();
 			do {
 				RecordItem item = new RecordItem();
@@ -108,6 +116,7 @@ public class DBWraper {
 				item.setMark(3, cursor.getLong(fourth));
 				item.setUploadTime(cursor.getLong(upload));
 				item.setState(RecordItem.State.values()[cursor.getInt(state)]);
+				item.setServerKey(cursor.getString(key));
 				item.init();
 				list.add(item);
 			} while (cursor.moveToNext());
@@ -146,6 +155,7 @@ public class DBWraper {
 					+ RECORD_MARK_THIRD + " INTEGER NULL, "
 					+ RECORD_MARK_FOURTH + " INTEGER NULL, "
 					+ RECORD_TIME_UPLOAD + " INTEGER NULL, "
+					+ RECORD_KEY + " TEXT NULL, "
 					+ RECORD_STATE + " INTEGER NOT NULL)");
 		}
 
@@ -154,15 +164,26 @@ public class DBWraper {
 			Log.e(tag, "onUpdate");
 
 			// Upgrade from version 1 to 2.
+			if (oldVersion == 1 ) {
+				try {
+
+					db.execSQL("ALTER TABLE " + RECORD_TABLE + " ADD COLUMN "
+						+ RECORD_STATE + " INTEGER DEFAULT 0;");
+				} catch (SQLException e) {
+					Log.e(tag, "Error executing SQL: ", e);
+				// If the error is "duplicate column name" then everything is
+				// fine
+				}
+			}
 			try {
 
 				db.execSQL("ALTER TABLE " + RECORD_TABLE + " ADD COLUMN "
-						+ RECORD_STATE + " INTEGER DEFAULT 0;");
+					+ RECORD_KEY + " TEXT NULL;");
 			} catch (SQLException e) {
 				Log.e(tag, "Error executing SQL: ", e);
-				// If the error is "duplicate column name" then everything is
-				// fine
-			}
+			// If the error is "duplicate column name" then everything is
+			// fine
+			}			
 		}
 	}
 

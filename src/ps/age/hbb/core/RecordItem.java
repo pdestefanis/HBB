@@ -48,7 +48,7 @@ public class RecordItem implements Serializable {
 	 */
 	private long id;
 	private long time;
-
+	private String serverKey;
 	private int length;
 	private String path;
 	private long uploadTime = -1;
@@ -57,6 +57,12 @@ public class RecordItem implements Serializable {
 	transient private JSONObject extra = new JSONObject();
 	private State mState;
 	private boolean mChanged;
+	public String getServerKey(){
+		return serverKey;
+	}
+	public void setServerKey(String key){
+		serverKey = key;
+	}
 	public long getId() {
 		return id;
 	}
@@ -219,7 +225,7 @@ public class RecordItem implements Serializable {
 		mChanged = true;
 
 	}
-
+	
 	public String getExtraString(String key) {
 		if (extra != null) {
 			try {
